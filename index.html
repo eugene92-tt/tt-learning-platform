@@ -41,26 +41,25 @@
       with proof of impact. Built for HR leaders who need to show ROI, not just attendance.
     </p>
 
-    <form class="capture" id="hero-form" novalidate data-capture-form>
+    <p class="scarcity">Early access &middot; first 50 Malaysian companies</p>
+
+    <form class="capture" id="hero-form" novalidate data-capture-form data-thanks="hero-thanks" data-location="hero">
       <label for="email-hero" class="sr-only">Work email</label>
       <div class="capture-row">
         <input id="email-hero" name="EMAIL" type="email" inputmode="email" autocomplete="email"
                placeholder="Your work email" required aria-describedby="hero-help hero-error">
-        <button type="submit" class="btn btn-gold">Register my interest</button>
+        <button type="submit" class="btn btn-gold">Claim my place</button>
       </div>
       <!-- honeypot, filled by bots only -->
       <div class="hp" aria-hidden="true"><input type="text" name="hp" tabindex="-1" autocomplete="off"></div>
-      <p class="help" id="hero-help">Leave your work email and we&#8217;ll be in touch after HRLC with early access. No spam, unsubscribe any time.</p>
+      <p class="help" id="hero-help">Leave your work email to claim a place. We&#8217;ll be in touch after HRLC. No spam, unsubscribe any time.</p>
       <p class="error" id="hero-error" role="alert" aria-live="polite" hidden></p>
     </form>
 
     <div class="thanks" id="hero-thanks" hidden tabindex="-1">
       <div class="thanks-icon" aria-hidden="true">✓</div>
       <h2>You&#8217;re on the list.</h2>
-      <p>Thanks for registering. We&#8217;ll email you after HRLC with early access details. In the meantime, come by the Thriving Talents booth and we&#8217;ll walk you through it.</p>
-      <p class="thanks-cta">
-        <a class="btn btn-outline-light" href="#demo">Book a 20-minute demo</a>
-      </p>
+      <p>We&#8217;ll confirm your early access place by email after HRLC. In the meantime, come by the Thriving Talents booth and we&#8217;ll walk you through the platform.</p>
     </div>
   </div>
 </header>
@@ -176,12 +175,30 @@
 </section>
 
 <!-- ============ 6. SECONDARY CTA + FOOTER ============ -->
-<section class="demo" id="demo" aria-labelledby="demo-h">
+<section class="closing" id="register" aria-labelledby="reg-h">
   <div class="wrap">
-    <h2 id="demo-h">See it on your own programmes.</h2>
-    <p>Book a 20-minute demo with a Thriving Talents account manager. Bring one programme you want to measure and we'll show you what the data would look like.</p>
-    <a class="btn btn-gold btn-lg" data-demo-link href="#" target="_blank" rel="noopener">Book a demo</a>
-    <p class="demo-alt">Or drop your email above and we'll follow up after HRLC.</p>
+    <div data-closing-intro>
+      <h2 id="reg-h">Claim your early access place.</h2>
+      <p>Early access opens to the first 50 Malaysian companies. Leave your work email and we&#8217;ll be in touch after HRLC.</p>
+    </div>
+
+    <form class="capture capture-center" id="cta-form" novalidate data-capture-form data-thanks="cta-thanks" data-location="closing">
+      <label for="email-cta" class="sr-only">Work email</label>
+      <div class="capture-row">
+        <input id="email-cta" name="EMAIL" type="email" inputmode="email" autocomplete="email"
+               placeholder="Your work email" required aria-describedby="cta-help cta-error">
+        <button type="submit" class="btn btn-gold">Claim my place</button>
+      </div>
+      <div class="hp" aria-hidden="true"><input type="text" name="hp" tabindex="-1" autocomplete="off"></div>
+      <p class="help" id="cta-help">No spam, unsubscribe any time.</p>
+      <p class="error" id="cta-error" role="alert" aria-live="polite" hidden></p>
+    </form>
+
+    <div class="thanks thanks-center" id="cta-thanks" hidden tabindex="-1">
+      <div class="thanks-icon" aria-hidden="true">&#10003;</div>
+      <h2>You&#8217;re on the list.</h2>
+      <p>We&#8217;ll confirm your early access place by email after HRLC.</p>
+    </div>
   </div>
 </section>
 
@@ -206,7 +223,7 @@
 
 <!-- sticky mobile CTA -->
 <div class="sticky-cta" id="sticky-cta" hidden>
-  <a href="#hero-form" class="btn btn-gold">Register my interest</a>
+  <a href="#hero-form" class="btn btn-gold">Claim my place</a>
 </div>
 
 <script src="/script.js" defer></script>

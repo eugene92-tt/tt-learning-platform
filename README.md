@@ -20,13 +20,14 @@ Edit `config.js`:
 | `emailProvider` | `'mailchimp'` or `'brevo'`. Leave `'none'` for staging QA (form succeeds locally, nothing is sent). |
 | `mailchimpAction` | Mailchimp → Audience → Signup forms → Embedded forms → copy the form `action` URL. |
 | `brevoAction` | Brevo → Contacts → Forms → Share → copy the form `action` URL. |
-| `calendlyUrl` | The demo booking link (Weizi or AM roster). Opens in a new tab. |
 | `ga4Id` | GA4 measurement ID (`G-…`). Blank disables GA4. |
 | `vercelAnalytics` | `true` once Web Analytics is switched on in the Vercel project. |
 | `frntlneLogo` | Optional override for the frntlne co-brand logo. The page already ships with the reverse logo; only set this to swap in a different file. |
 | `hrdcNumber` | HRD Corp registration number for the badge. |
 
-The hero form registers interest rather than delivering a lead magnet. Any confirmation or
+Both forms register interest for early access rather than delivering a lead magnet.
+The page has two identical capture forms (hero and closing section); submitting either
+switches both to the thank-you state. Any confirmation or
 welcome email is configured inside Mailchimp/Brevo (automation on the list/form), not in this repo.
 Submissions are tagged `SOURCE=HRLC` so booth signups can be segmented later.
 
@@ -35,9 +36,8 @@ Submissions are tagged `SOURCE=HRLC` so booth signups can be segmented later.
 | Event | When |
 | --- | --- |
 | `page_view` | automatic (GA4 and Vercel) |
-| `email_capture` | form submitted successfully |
+| `email_capture` | form submitted successfully (`location`: `hero` or `closing`) |
 | `email_capture_error` | provider rejected or timed out |
-| `demo_click` | "Book a demo" clicked |
 | `scroll_depth` | `percent: 50` and `percent: 100`, once each |
 
 With `emailProvider: 'none'` every event is also logged to the browser console for QA.
@@ -49,6 +49,13 @@ With `emailProvider: 'none'` every event is also logged to the browser console f
 `assets/frntlne-logo-white.svg` — the same file with only the seven wordmark letters
 recoloured to white. The stacked ribbon mark is untouched. Use the full-colour file on
 any light background.
+
+## The "first 50" claim
+
+The hero and closing section both state that early access opens to the first 50
+Malaysian companies. Nothing in this page counts or enforces that cap — it is a
+promise TT has to keep manually. Track signups in the email tool and decide what
+happens at 51 before the booth opens.
 
 ## Content still to swap in
 

@@ -14,9 +14,6 @@ window.TT_CONFIG = {
   // Looks like: https://sibforms.com/serve/MUIFAAAA...
   brevoAction: '',
 
-  // Calendly booking link (opens in a new tab). Slot owner: Weizi or an AM.
-  calendlyUrl: 'https://calendly.com/thrivingtalents/demo',
-
   // Analytics. GA4 measurement ID like 'G-XXXXXXXXXX'. Leave blank to disable.
   ga4Id: '',
   // Vercel Web Analytics (enable in the Vercel project first).

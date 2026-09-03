@@ -37,10 +37,6 @@
   }
 
   /* ---------- Config-driven bits ---------- */
-  document.querySelectorAll('[data-demo-link]').forEach(function (a) {
-    a.href = cfg.calendlyUrl || '#';
-    a.addEventListener('click', function () { track('demo_click', { location: 'section_6' }); });
-  });
   if (cfg.frntlneLogo) {
     document.querySelectorAll('[data-cobrand] .cobrand-logo').forEach(function (img) {
       img.src = cfg.frntlneLogo;
@@ -65,23 +61,23 @@
   window.addEventListener('scroll', checkDepth, { passive: true });
   window.addEventListener('load', checkDepth);
 
-  /* ---------- Sticky mobile CTA ---------- */
-  var sticky = document.getElementById('sticky-cta');
-  var form = document.querySelector('[data-capture-form]');
-  var thanks = document.getElementById('hero-thanks');
-  if (sticky && form && 'IntersectionObserver' in window) {
-    new IntersectionObserver(function (entries) {
-      var formVisible = entries[0].isIntersecting;
-      sticky.hidden = formVisible || !thanks.hidden;
-    }, { threshold: 0 }).observe(form);
-  }
-
   /* ---------- Email capture ---------- */
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-  var BUTTON_LABEL = 'Register my interest';
+  var BUTTON_LABEL = 'Claim my place';
+  var forms = [].slice.call(document.querySelectorAll('[data-capture-form]'));
+  var sticky = document.getElementById('sticky-cta');
 
-  function showError(msg) {
-    var err = document.getElementById('hero-error');
+  function panelFor(form) { return document.getElementById(form.getAttribute('data-thanks')); }
+
+  /* Sticky mobile CTA: visible only while the hero form is off screen. */
+  if (sticky && forms[0] && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      sticky.hidden = entries[0].isIntersecting || forms[0].hidden;
+    }, { threshold: 0 }).observe(forms[0]);
+  }
+
+  function showError(form, msg) {
+    var err = form.querySelector('.error');
     var input = form.querySelector('input[type="email"]');
     err.textContent = msg;
     err.hidden = !msg;
@@ -89,17 +85,26 @@
     if (msg) input.focus();
   }
 
-  function setBusy(busy) {
+  function setBusy(form, busy) {
     var btn = form.querySelector('button[type="submit"]');
     btn.disabled = busy;
-    btn.textContent = busy ? 'Sending…' : BUTTON_LABEL;
+    btn.textContent = busy ? 'Sending\u2026' : BUTTON_LABEL;
   }
 
-  function showThanks() {
-    form.hidden = true;
-    thanks.hidden = false;
+  // Registering once covers the whole page, so every form flips to its
+  // thank-you panel — not just the one that was submitted.
+  function showThanks(submitted) {
+    forms.forEach(function (f) {
+      f.hidden = true;
+      var panel = panelFor(f);
+      if (panel) panel.hidden = false;
+    });
+    // the closing section's "leave your email" pitch no longer applies
+    var intro = document.querySelector('[data-closing-intro]');
+    if (intro) intro.hidden = true;
     if (sticky) sticky.hidden = true;
-    thanks.focus();
+    var focusTarget = panelFor(submitted);
+    if (focusTarget) focusTarget.focus();
     try { history.replaceState(null, '', '#thanks'); } catch (e) {}
   }
 
@@ -124,8 +129,8 @@
   }
 
   // Brevo's hosted form endpoint accepts a plain form POST. It doesn't send CORS
-  // headers, so we post opaquely and trust the 2xx (the double opt-in / auto-email
-  // is configured on the Brevo side).
+  // headers, so we post opaquely and trust the 2xx (the confirmation email is
+  // configured on the Brevo side).
   function submitBrevo(email) {
     var fd = new FormData();
     fd.append('EMAIL', email);
@@ -135,34 +140,37 @@
     return fetch(cfg.brevoAction, { method: 'POST', mode: 'no-cors', body: fd }).then(function () {});
   }
 
-  function submitDemo(email) {
+  function submitDemo() {
     return new Promise(function (resolve) { setTimeout(resolve, 600); });
   }
 
-  if (form) {
+  forms.forEach(function (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var input = form.querySelector('input[type="email"]');
       var email = (input.value || '').trim();
       if (form.querySelector('input[name="hp"]').value) return; // bot
-      if (!email) return showError('Enter your work email to register your interest.');
-      if (!EMAIL_RE.test(email)) return showError('That email doesn\'t look right. Check for typos and try again.');
-      showError('');
-      setBusy(true);
+      if (!email) return showError(form, 'Enter your work email to claim a place.');
+      if (!EMAIL_RE.test(email)) return showError(form, 'That email doesn\'t look right. Check for typos and try again.');
+      showError(form, '');
+      setBusy(form, true);
 
       var send;
       if (cfg.emailProvider === 'mailchimp' && cfg.mailchimpAction) send = submitMailchimp(email);
       else if (cfg.emailProvider === 'brevo' && cfg.brevoAction) send = submitBrevo(email);
-      else send = submitDemo(email);
+      else send = submitDemo();
 
       send.then(function () {
-        track('email_capture', { provider: cfg.emailProvider || 'none' });
-        showThanks();
+        track('email_capture', {
+          provider: cfg.emailProvider || 'none',
+          location: form.getAttribute('data-location') || 'unknown'
+        });
+        showThanks(form);
       }).catch(function (err) {
-        setBusy(false);
-        showError('We couldn\'t save that just now. Please try again, or come to the Thriving Talents booth and we\'ll sign you up there.');
+        setBusy(form, false);
+        showError(form, 'We couldn\'t save that just now. Please try again, or come to the Thriving Talents booth and we\'ll sign you up there.');
         track('email_capture_error', { message: String(err && err.message || err) });
       });
     });
-  }
+  });
 })();
