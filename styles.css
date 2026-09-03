@@ -254,24 +254,25 @@ section { padding: 56px 0; }
    5. CREDIBILITY
    ========================================================================== */
 .cred .section-h { text-align: center; }
-.logo-label {
-  text-align: center; font-size: 13px; font-weight: 700; letter-spacing: .1em;
-  text-transform: uppercase; color: var(--ink-3); margin: 26px 0 12px;
+.logo-wall {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 10px; margin: 28px auto 0; max-width: 420px;
 }
-.logo-strip {
-  display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+.logo-wall li {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 64px; padding: 6px;
 }
-.logo-strip li { display: flex; align-items: center; min-height: 44px; }
-.logo-strip img {
-  height: 32px; width: auto; max-width: 140px; object-fit: contain;
-  opacity: .9;
+.logo-wall img {
+  width: auto; max-width: 100%; object-fit: contain;
+  opacity: .9; transition: opacity .18s ease;
 }
-.wordmark {
-  display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px;
-  border-radius: 8px; border: 1px solid var(--line); background: var(--bg-2);
-  font-weight: 800; letter-spacing: -.01em; color: var(--ink-2);
-}
-.wordmark-pending { color: var(--ink-3); font-weight: 600; border-style: dashed; background: transparent; }
+.logo-wall li:hover img { opacity: 1; }
+/* Optical sizing: keeps logos at similar visual weight despite very
+   different aspect ratios (P&G is 1:1, Michael Kors is 10:1). */
+.logo-wall .lw-sq img { height: 44px; }
+.logo-wall .lw-m img  { height: 30px; }
+.logo-wall .lw-w img  { height: 24px; }
+.logo-wall .lw-xw img { height: 19px; }
 
 .badges { display: grid; gap: 12px; margin-top: 32px; }
 .badge {
@@ -337,8 +338,12 @@ section { padding: 56px 0; }
   .tool-list { grid-template-columns: repeat(3, 1fr); }
   .aud-grid { grid-template-columns: 1fr 1fr; }
   .aud-card { padding: 32px 28px; }
-  .logo-strip { gap: 18px 28px; }
-  .logo-strip img { height: 40px; max-width: 170px; }
+  .logo-wall { grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 900px; }
+  .logo-wall li { min-height: 84px; padding: 10px; }
+  .logo-wall .lw-sq img { height: 56px; }
+  .logo-wall .lw-m img  { height: 40px; }
+  .logo-wall .lw-w img  { height: 32px; }
+  .logo-wall .lw-xw img { height: 25px; }
   .foot { padding-bottom: 40px; }
   .sticky-cta { display: none !important; }
 }
