@@ -43,8 +43,7 @@ With `emailProvider: 'none'` every event is also logged to the browser console f
 
 ## Content still to swap in
 
-- **TT client logos.** Section 5 shows Maybank, KWSP/EPF, AIA, HSBC, RHB, FWD, Mastercard and Sime Darby Plantation from the TT client-logo folder in Drive (`assets/logos/`). Remove any Michael has not cleared by deleting its `<li>`. EY is not in the folder; add `assets/logos/ey.png` and an `<li>` if cleared.
-- **frntlne client logos.** Shown as text wordmarks using the names frntlne publishes on its own site (Google, Coca-Cola, L'Oréal, Bacardi, Pernod Ricard, Ryanair, Asahi Beverages, Ramsay Health). Replace with logo files only after Datuk confirms what TT may display.
+- **Client logo wall.** Section 5 shows one unlabelled wall of logos from `assets/logos/`: Google, Coca-Cola, P&G, L'Oreal, Ryanair, Versace, Michael Kors, Rieckermann. These are frntlne's clients, and the wall does not say so — confirm with Datuk that TT is cleared to display them before the production deploy. To add or remove one, edit the single `<li>` in the `.logo-wall` list and drop the file into `assets/logos/`. Give it a size class by shape: `lw-sq` (square), `lw-m` (about 3:1), `lw-w` (about 5:1), `lw-xw` (8:1 or wider) — this keeps every logo at a similar optical weight.
 - **Product screenshots.** Section 3 uses CSS-drawn previews. Replace each `.tool-ui` block with a real frntlne screenshot (`<img>`, ~700px wide, compressed) when available.
 - **frntlne co-brand mark.** Currently a text wordmark. Drop the official logo into `assets/` and set `frntlneLogo` in `config.js`; no HTML edit needed.
 - **HRDC wording.** Badge says "HRD Corp registered training provider" (no scheme claim). Adjust once the open question in the PRD is settled.
