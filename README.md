@@ -8,6 +8,7 @@ styles.css   styles, TT brand tokens at the top (navy #101C3E, gold #FDB72E)
 config.js    the only file to edit before launch: email tool, Calendly, analytics
 script.js    form handling, analytics events, scroll depth, sticky CTA
 assets/      TT logo (colour + white), frntlne logo, favicon, OG image
+tools/       Google Apps Script endpoint for Sheets capture
 vercel.json  caching + security headers
 ```
 
@@ -17,7 +18,9 @@ Edit `config.js`:
 
 | Key | What to put |
 | --- | --- |
-| `emailProvider` | `'mailchimp'` or `'brevo'`. Leave `'none'` for staging QA (form succeeds locally, nothing is sent). |
+| `emailProvider` | `'sheets'`, `'mailchimp'` or `'brevo'`. Leave `'none'` for staging QA (form succeeds locally, nothing is sent). |
+| `sheetsEndpoint` | The Apps Script web app `/exec` URL (see below). |
+| `sheetsToken` | Must match `TOKEN` inside the Apps Script. |
 | `mailchimpAction` | Mailchimp → Audience → Signup forms → Embedded forms → copy the form `action` URL. |
 | `brevoAction` | Brevo → Contacts → Forms → Share → copy the form `action` URL. |
 | `ga4Id` | GA4 measurement ID (`G-…`). Blank disables GA4. |
@@ -29,6 +32,36 @@ The page has two identical capture forms (hero and closing section); submitting 
 switches both to the thank-you state. Any confirmation or
 welcome email is configured inside Mailchimp/Brevo (automation on the list/form), not in this repo.
 Submissions are tagged `SOURCE=HRLC` so booth signups can be segmented later.
+
+## Collecting signups in Google Sheets
+
+The page posts each signup straight from the visitor's browser to a Google
+Apps Script web app, which appends it to a sheet. No server of ours sits in
+the middle, and nothing is stored on Vercel.
+
+1. Create (or open) the Google Sheet that should hold the signups.
+2. **Extensions -> Apps Script**, delete the placeholder, and paste
+   `tools/google-apps-script.gs`.
+3. Set `TOKEN` at the top of that file to any random string.
+4. **Deploy -> New deployment -> Web app**, with *Execute as* **Me** and
+   *Who has access* **Anyone**. Approve the permission prompt.
+5. Copy the `/exec` URL into `sheetsEndpoint` in `config.js`, put the same
+   token in `sheetsToken`, and set `emailProvider: 'sheets'`.
+
+Opening the `/exec` URL in a browser should return `{"ok":true,...}`. That is
+the quickest way to confirm the deployment is live.
+
+After editing the script, **Deploy -> Manage deployments -> edit -> Version:
+New version**, or the live URL keeps serving the old code.
+
+The sheet keeps one row per address: a repeat signup bumps *Last seen* and
+*Submissions* rather than adding a duplicate. Rows record which form was used
+(`hero` or `closing`).
+
+Two things this does not do, both of which matter once you email these people:
+there is no confirmation email (the page only promises to be in touch after
+HRLC), and there is no unsubscribe link, so the footer's "unsubscribe any time"
+has to be honoured by hand or by moving the list into a proper email tool.
 
 ## Analytics events
 

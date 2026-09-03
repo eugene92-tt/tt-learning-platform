@@ -138,6 +138,42 @@
     return fetch(cfg.brevoAction, { method: 'POST', mode: 'no-cors', body: fd }).then(function () {});
   }
 
+  // Google Sheets via an Apps Script web app. A text/plain body keeps this a
+  // "simple" request, so the browser skips the CORS preflight that Apps Script
+  // cannot answer.
+  function submitSheet(email, location) {
+    var payload = JSON.stringify({
+      email: email,
+      source: 'HRLC',
+      location: location,
+      token: cfg.sheetsToken || ''
+    });
+    var opts = {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: payload
+    };
+    return fetch(cfg.sheetsEndpoint, opts).then(function (r) {
+      return r.text();
+    }).then(function (text) {
+      var res = null;
+      try { res = JSON.parse(text); } catch (e) {}
+      // Only a reply that explicitly rejects the row counts as a failure.
+      if (res && res.ok === false) throw new Error(res.error || 'rejected');
+    }, function () {
+      // fetch itself failed, which is either a real network problem or the
+      // browser refusing to let us read a reply that did arrive. Send it again
+      // opaquely rather than telling someone their address was not saved; the
+      // script keeps one row per address, so a duplicate cannot land.
+      return fetch(cfg.sheetsEndpoint, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: payload
+      }).then(function () {});
+    });
+  }
+
   function submitDemo() {
     return new Promise(function (resolve) { setTimeout(resolve, 600); });
   }
@@ -153,15 +189,17 @@
       showError(form, '');
       setBusy(form, true);
 
+      var where = form.getAttribute('data-location') || 'unknown';
       var send;
-      if (cfg.emailProvider === 'mailchimp' && cfg.mailchimpAction) send = submitMailchimp(email);
+      if (cfg.emailProvider === 'sheets' && cfg.sheetsEndpoint) send = submitSheet(email, where);
+      else if (cfg.emailProvider === 'mailchimp' && cfg.mailchimpAction) send = submitMailchimp(email);
       else if (cfg.emailProvider === 'brevo' && cfg.brevoAction) send = submitBrevo(email);
       else send = submitDemo();
 
       send.then(function () {
         track('email_capture', {
           provider: cfg.emailProvider || 'none',
-          location: form.getAttribute('data-location') || 'unknown'
+          location: where
         });
         showThanks(form);
       }).catch(function (err) {
