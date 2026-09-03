@@ -119,12 +119,7 @@ section { padding: 56px 0; }
   font-size: 11px; line-height: 1.25; color: rgba(255,255,255,.65);
   letter-spacing: .01em; text-wrap: balance;
 }
-.cobrand-mark {
-  font-weight: 800; font-size: 17px; white-space: nowrap; letter-spacing: -.02em; color: var(--white);
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-}
-.cobrand-logo { height: 22px; width: auto; display: inline-block; vertical-align: middle; }
-.cobrand-mark::after { content: ""; display: inline-block; width: 6px; height: 6px; margin-left: 2px; border-radius: 50%; background: var(--gold); vertical-align: 2px; }
+.cobrand-logo { height: 21px; width: auto; display: block; }
 
 .eyebrow {
   color: var(--gold); font-weight: 700; font-size: 14px; letter-spacing: .1em;
@@ -297,7 +292,7 @@ section { padding: 56px 0; }
 
 .foot { background: var(--navy-ink); color: rgba(255,255,255,.75); padding: 32px 0 96px; font-size: 14px; }
 .foot-brand { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; margin-bottom: 18px; }
-.foot-brand img { width: 150px; }
+.foot-brand > img { width: 150px; }
 .foot-brand .cobrand { align-items: flex-start; text-align: left; max-width: none; }
 .foot a { color: var(--gold); text-decoration: none; }
 .foot a:hover { text-decoration: underline; }
