@@ -23,8 +23,5 @@ window.TT_CONFIG = {
   // The page ships with /assets/frntlne-logo-white.svg (reverse version, for the
   // navy background). /assets/frntlne-logo.svg is the original full-colour file,
   // for use on light backgrounds. Leave blank to keep the shipped logo.
-  frntlneLogo: '',
-
-  // HRD Corp registration number shown on the badge.
-  hrdcNumber: ''
+  frntlneLogo: ''
 };

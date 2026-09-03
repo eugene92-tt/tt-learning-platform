@@ -280,19 +280,6 @@ section { padding: 56px 0; }
 .logo-wall .lw-w img  { height: 24px; }
 .logo-wall .lw-xw img { height: 19px; }
 
-.badges { display: grid; gap: 12px; margin-top: 32px; }
-.badge {
-  display: flex; align-items: center; gap: 14px; padding: 14px 16px;
-  border-radius: var(--radius); border: 1px solid var(--line); background: var(--white);
-}
-.badge-mark {
-  flex: none; width: 56px; height: 56px; border-radius: 12px; display: grid; place-items: center;
-  background: var(--navy); color: var(--white); font-weight: 900; font-size: 14px; letter-spacing: .02em;
-}
-.badge-mark-gold { background: var(--gold); color: var(--navy); font-size: 18px; }
-.badge-text { font-size: 15px; line-height: 1.4; color: var(--ink-2); }
-.badge-text strong { color: var(--ink); }
-
 /* ==========================================================================
    6. DEMO CTA + FOOTER
    ========================================================================== */
@@ -328,8 +315,7 @@ section { padding: 56px 0; }
   .capture input[type="email"] { flex: 1; }
   .capture .btn { width: auto; }
   .thanks-cta { flex-direction: row; align-items: center; gap: 20px; }
-  .badges { grid-template-columns: 1fr 1fr; }
-  .foot-brand { flex-direction: row; align-items: center; gap: 20px; }
+    .foot-brand { flex-direction: row; align-items: center; gap: 20px; }
 }
 
 @media (min-width: 800px) {

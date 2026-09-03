@@ -42,8 +42,6 @@
       img.src = cfg.frntlneLogo;
     });
   }
-  var hrdc = document.querySelector('[data-hrdc-number]');
-  if (hrdc && cfg.hrdcNumber) hrdc.textContent = cfg.hrdcNumber;
   var yr = document.querySelector('[data-year]');
   if (yr) yr.textContent = String(new Date().getFullYear());
 
