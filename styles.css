@@ -181,12 +181,38 @@ section { padding: 56px 0; }
   padding: 20px 16px; box-shadow: 0 2px 0 rgba(16,28,62,.03);
   border-top: 4px solid var(--gold);
 }
+/* Fixed height so every label starts on the same line, whatever the
+   figure above it is set at. */
 .stat-n {
-  display: block; font-size: clamp(30px, 8vw, 44px); font-weight: 800; line-height: 1;
-  letter-spacing: -.03em; color: var(--navy); font-variant-numeric: tabular-nums;
+  display: flex; align-items: baseline; flex-wrap: nowrap;
+  min-height: clamp(32px, 8.4vw, 46px);
+  color: var(--navy); font-variant-numeric: tabular-nums lining-nums;
 }
-.stat-n small { font-size: .55em; font-weight: 700; color: var(--ink-3); letter-spacing: 0; }
-.stat-l { display: block; margin-top: 8px; font-size: 15px; color: var(--ink-2); line-height: 1.3; }
+.stat-v {
+  font-size: clamp(30px, 8vw, 44px); font-weight: 800; line-height: 1;
+  letter-spacing: -.03em;
+}
+/* A range carries roughly twice the glyphs, so it is set smaller to keep
+   the four figures at the same optical weight. */
+.stat-n.is-range .stat-v { font-size: clamp(23px, 6.1vw, 34px); }
+
+/* Unit and range connector are different things and are styled apart:
+   the unit hugs its number, the connector is a spaced, quieter joiner. */
+.stat-u {
+  font-size: clamp(16px, 4.2vw, 23px); font-weight: 700;
+  color: var(--ink-3); letter-spacing: 0; margin-left: .1em;
+}
+.stat-c {
+  font-size: clamp(12px, 3vw, 15px); font-weight: 600;
+  color: var(--ink-3); letter-spacing: .02em; margin: 0 .45em;
+}
+/* A word connector reads best small; a dash has to sit near the figures'
+   own size or it looks like a stray hyphen. */
+.stat-c-dash {
+  font-size: clamp(18px, 4.8vw, 27px); font-weight: 700;
+  letter-spacing: 0; margin: 0 .16em;
+}
+.stat-l { display: block; margin-top: 10px; font-size: 15px; color: var(--ink-2); line-height: 1.3; }
 
 /* ==========================================================================
    3. TOOLS
