@@ -157,7 +157,6 @@ section { padding: 56px 0; }
 .thanks h2 { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
 .thanks p { color: rgba(255,255,255,.82); }
 .thanks-cta { display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
-.playbook-fallback { color: var(--gold); font-weight: 600; }
 
 /* ==========================================================================
    2. STATS

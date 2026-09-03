@@ -17,10 +17,6 @@ window.TT_CONFIG = {
   // Calendly booking link (opens in a new tab). Slot owner: Weizi or an AM.
   calendlyUrl: 'https://calendly.com/thrivingtalents/demo',
 
-  // Optional: a direct link to the playbook PDF shown on the thank-you state
-  // as a fallback if the auto-email is delayed. Leave blank to hide.
-  playbookUrl: '',
-
   // Analytics. GA4 measurement ID like 'G-XXXXXXXXXX'. Leave blank to disable.
   ga4Id: '',
   // Vercel Web Analytics (enable in the Vercel project first).

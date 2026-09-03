@@ -21,13 +21,14 @@ Edit `config.js`:
 | `mailchimpAction` | Mailchimp → Audience → Signup forms → Embedded forms → copy the form `action` URL. |
 | `brevoAction` | Brevo → Contacts → Forms → Share → copy the form `action` URL. |
 | `calendlyUrl` | The demo booking link (Weizi or AM roster). Opens in a new tab. |
-| `playbookUrl` | Optional direct PDF link shown on the thank-you state as a fallback. |
 | `ga4Id` | GA4 measurement ID (`G-…`). Blank disables GA4. |
 | `vercelAnalytics` | `true` once Web Analytics is switched on in the Vercel project. |
 | `frntlneLogo` | Optional override for the frntlne co-brand logo. The page already ships with the reverse logo; only set this to swap in a different file. |
 | `hrdcNumber` | HRD Corp registration number for the badge. |
 
-The playbook auto-email is configured inside Mailchimp/Brevo (welcome automation on the list/form), not in this repo.
+The hero form registers interest rather than delivering a lead magnet. Any confirmation or
+welcome email is configured inside Mailchimp/Brevo (automation on the list/form), not in this repo.
+Submissions are tagged `SOURCE=HRLC` so booth signups can be segmented later.
 
 ## Analytics events
 

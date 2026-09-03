@@ -78,6 +78,7 @@
 
   /* ---------- Email capture ---------- */
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  var BUTTON_LABEL = 'Register my interest';
 
   function showError(msg) {
     var err = document.getElementById('hero-error');
@@ -91,15 +92,13 @@
   function setBusy(busy) {
     var btn = form.querySelector('button[type="submit"]');
     btn.disabled = busy;
-    btn.textContent = busy ? 'Sending…' : 'Get the HRLC playbook';
+    btn.textContent = busy ? 'Sending…' : BUTTON_LABEL;
   }
 
   function showThanks() {
     form.hidden = true;
     thanks.hidden = false;
     if (sticky) sticky.hidden = true;
-    var fb = thanks.querySelector('[data-playbook-link]');
-    if (fb && cfg.playbookUrl) { fb.href = cfg.playbookUrl; fb.hidden = false; }
     thanks.focus();
     try { history.replaceState(null, '', '#thanks'); } catch (e) {}
   }
@@ -146,7 +145,7 @@
       var input = form.querySelector('input[type="email"]');
       var email = (input.value || '').trim();
       if (form.querySelector('input[name="hp"]').value) return; // bot
-      if (!email) return showError('Enter your work email to get the playbook.');
+      if (!email) return showError('Enter your work email to register your interest.');
       if (!EMAIL_RE.test(email)) return showError('That email doesn\'t look right. Check for typos and try again.');
       showError('');
       setBusy(true);
@@ -161,7 +160,7 @@
         showThanks();
       }).catch(function (err) {
         setBusy(false);
-        showError('We couldn\'t save that just now. Please try again, or come to the Thriving Talents booth and we\'ll send it by hand.');
+        showError('We couldn\'t save that just now. Please try again, or come to the Thriving Talents booth and we\'ll sign you up there.');
         track('email_capture_error', { message: String(err && err.message || err) });
       });
     });
