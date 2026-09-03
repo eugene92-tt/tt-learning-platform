@@ -111,10 +111,16 @@ section { padding: 56px 0; }
   margin-bottom: 40px;
 }
 .brand img { width: 168px; }
-.cobrand { display: inline-flex; align-items: baseline; gap: 6px; white-space: nowrap; }
-.cobrand-label { font-size: 12px; color: rgba(255,255,255,.65); letter-spacing: .02em; }
+.cobrand {
+  display: inline-flex; flex-direction: column; align-items: flex-end;
+  gap: 1px; text-align: right; max-width: 132px;
+}
+.cobrand-label {
+  font-size: 11px; line-height: 1.25; color: rgba(255,255,255,.65);
+  letter-spacing: .01em; text-wrap: balance;
+}
 .cobrand-mark {
-  font-weight: 800; font-size: 17px; letter-spacing: -.02em; color: var(--white);
+  font-weight: 800; font-size: 17px; white-space: nowrap; letter-spacing: -.02em; color: var(--white);
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
 .cobrand-logo { height: 22px; width: auto; display: inline-block; vertical-align: middle; }
@@ -291,6 +297,7 @@ section { padding: 56px 0; }
 .foot { background: var(--navy-ink); color: rgba(255,255,255,.75); padding: 32px 0 96px; font-size: 14px; }
 .foot-brand { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; margin-bottom: 18px; }
 .foot-brand img { width: 150px; }
+.foot-brand .cobrand { align-items: flex-start; text-align: left; max-width: none; }
 .foot a { color: var(--gold); text-decoration: none; }
 .foot a:hover { text-decoration: underline; }
 .foot-text { margin-bottom: 12px; }
@@ -322,6 +329,8 @@ section { padding: 56px 0; }
   section { padding: 80px 0; }
   .hero { padding: 28px 0 88px; }
   .brand img { width: 210px; }
+  .cobrand { max-width: none; }
+  .cobrand-label { font-size: 12px; }
   .brandbar { margin-bottom: 64px; }
   .stat-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
   .stat { padding: 26px 22px; }
