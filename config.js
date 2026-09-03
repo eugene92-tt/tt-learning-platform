@@ -26,6 +26,11 @@ window.TT_CONFIG = {
   // Vercel Web Analytics (enable in the Vercel project first).
   vercelAnalytics: true,
 
+  // frntlne logo file for the 'Powered by' co-brand mark (header + footer).
+  // Drop the file into assets/ and set the path, e.g. '/assets/frntlne-logo.svg'.
+  // Leave blank to show the text wordmark.
+  frntlneLogo: '',
+
   // HRD Corp registration number shown on the badge.
   hrdcNumber: ''
 };

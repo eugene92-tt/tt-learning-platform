@@ -41,6 +41,13 @@
     a.href = cfg.calendlyUrl || '#';
     a.addEventListener('click', function () { track('demo_click', { location: 'section_6' }); });
   });
+  if (cfg.frntlneLogo) {
+    document.querySelectorAll('[data-cobrand] .cobrand-mark').forEach(function (el) {
+      var img = document.createElement('img');
+      img.src = cfg.frntlneLogo; img.alt = 'frntlne'; img.className = 'cobrand-logo';
+      el.replaceWith(img);
+    });
+  }
   var hrdc = document.querySelector('[data-hrdc-number]');
   if (hrdc && cfg.hrdcNumber) hrdc.textContent = cfg.hrdcNumber;
   var yr = document.querySelector('[data-year]');

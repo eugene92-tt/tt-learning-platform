@@ -117,6 +117,7 @@ section { padding: 56px 0; }
   font-weight: 800; font-size: 17px; letter-spacing: -.02em; color: var(--white);
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
+.cobrand-logo { height: 22px; width: auto; display: inline-block; vertical-align: middle; }
 .cobrand-mark::after { content: ""; display: inline-block; width: 6px; height: 6px; margin-left: 2px; border-radius: 50%; background: var(--gold); vertical-align: 2px; }
 
 .eyebrow {
@@ -254,8 +255,11 @@ section { padding: 56px 0; }
 .logo-strip {
   display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
 }
-.logo-strip li { display: flex; }
-.logo-strip img { height: 30px; width: auto; filter: grayscale(1); opacity: .8; }
+.logo-strip li { display: flex; align-items: center; min-height: 44px; }
+.logo-strip img {
+  height: 32px; width: auto; max-width: 140px; object-fit: contain;
+  opacity: .9;
+}
 .wordmark {
   display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px;
   border-radius: 8px; border: 1px solid var(--line); background: var(--bg-2);
@@ -324,7 +328,8 @@ section { padding: 56px 0; }
   .tool-list { grid-template-columns: repeat(3, 1fr); }
   .aud-grid { grid-template-columns: 1fr 1fr; }
   .aud-card { padding: 32px 28px; }
-  .logo-strip { gap: 14px; }
+  .logo-strip { gap: 18px 28px; }
+  .logo-strip img { height: 40px; max-width: 170px; }
   .foot { padding-bottom: 40px; }
   .sticky-cta { display: none !important; }
 }

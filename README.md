@@ -24,6 +24,7 @@ Edit `config.js`:
 | `playbookUrl` | Optional direct PDF link shown on the thank-you state as a fallback. |
 | `ga4Id` | GA4 measurement ID (`G-…`). Blank disables GA4. |
 | `vercelAnalytics` | `true` once Web Analytics is switched on in the Vercel project. |
+| `frntlneLogo` | Path to the frntlne logo file once received, e.g. `/assets/frntlne-logo.svg`. Replaces the text wordmark in the header and footer. |
 | `hrdcNumber` | HRD Corp registration number for the badge. |
 
 The playbook auto-email is configured inside Mailchimp/Brevo (welcome automation on the list/form), not in this repo.
@@ -42,9 +43,10 @@ With `emailProvider: 'none'` every event is also logged to the browser console f
 
 ## Content still to swap in
 
-- **Client logos.** Section 5 uses text wordmarks. Once Michael and Datuk confirm clearance, drop SVG/PNG files into `assets/logos/` and replace each `<span class="wordmark">` with `<img src="/assets/logos/name.svg" alt="Name" height="30">`. The frntlne row is dashed placeholders until then.
+- **TT client logos.** Section 5 shows Maybank, KWSP/EPF, AIA, HSBC, RHB, FWD, Mastercard and Sime Darby Plantation from the TT client-logo folder in Drive (`assets/logos/`). Remove any Michael has not cleared by deleting its `<li>`. EY is not in the folder; add `assets/logos/ey.png` and an `<li>` if cleared.
+- **frntlne client logos.** Shown as text wordmarks using the names frntlne publishes on its own site (Google, Coca-Cola, L'Oréal, Bacardi, Pernod Ricard, Ryanair, Asahi Beverages, Ramsay Health). Replace with logo files only after Datuk confirms what TT may display.
 - **Product screenshots.** Section 3 uses CSS-drawn previews. Replace each `.tool-ui` block with a real frntlne screenshot (`<img>`, ~700px wide, compressed) when available.
-- **frntlne co-brand mark.** Currently a text wordmark. Swap `.cobrand-mark` for the official logo file once received.
+- **frntlne co-brand mark.** Currently a text wordmark. Drop the official logo into `assets/` and set `frntlneLogo` in `config.js`; no HTML edit needed.
 - **HRDC wording.** Badge says "HRD Corp registered training provider" (no scheme claim). Adjust once the open question in the PRD is settled.
 - **Tool descriptions.** Course / Mimic / Playbook one-liners are drafted from the product names. Verify with Weizi.
 
