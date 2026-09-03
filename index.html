@@ -44,15 +44,18 @@
     <p class="scarcity">Early access &middot; limited first cohort</p>
 
     <form class="capture" id="hero-form" novalidate data-capture-form data-thanks="hero-thanks" data-location="hero">
+      <label for="name-hero" class="sr-only">Your name</label>
+      <input class="capture-field" id="name-hero" name="NAME" type="text" autocomplete="name"
+             placeholder="Your name" required aria-describedby="hero-help hero-error">
       <label for="email-hero" class="sr-only">Work email</label>
       <div class="capture-row">
-        <input id="email-hero" name="EMAIL" type="email" inputmode="email" autocomplete="email"
+        <input class="capture-field" id="email-hero" name="EMAIL" type="email" inputmode="email" autocomplete="email"
                placeholder="Your work email" required aria-describedby="hero-help hero-error">
         <button type="submit" class="btn btn-gold">Claim my place</button>
       </div>
       <!-- honeypot, filled by bots only -->
       <div class="hp" aria-hidden="true"><input type="text" name="hp" tabindex="-1" autocomplete="off"></div>
-      <p class="help" id="hero-help">Leave your work email to claim a place. We&#8217;ll be in touch after HRLC. No spam, unsubscribe any time.</p>
+      <p class="help" id="hero-help">Leave your name and work email to claim a place. We&#8217;ll be in touch after HRLC. No spam, unsubscribe any time.</p>
       <p class="error" id="hero-error" role="alert" aria-live="polite" hidden></p>
     </form>
 
@@ -182,13 +185,16 @@
   <div class="wrap">
     <div data-closing-intro>
       <h2 id="reg-h">Claim your early access place.</h2>
-      <p>Early access opens to a limited first cohort of Malaysian companies. Leave your work email and we&#8217;ll be in touch after HRLC.</p>
+      <p>Early access opens to a limited first cohort of Malaysian companies. Leave your details and we&#8217;ll be in touch after HRLC.</p>
     </div>
 
     <form class="capture capture-center" id="cta-form" novalidate data-capture-form data-thanks="cta-thanks" data-location="closing">
+      <label for="name-cta" class="sr-only">Your name</label>
+      <input class="capture-field" id="name-cta" name="NAME" type="text" autocomplete="name"
+             placeholder="Your name" required aria-describedby="cta-help cta-error">
       <label for="email-cta" class="sr-only">Work email</label>
       <div class="capture-row">
-        <input id="email-cta" name="EMAIL" type="email" inputmode="email" autocomplete="email"
+        <input class="capture-field" id="email-cta" name="EMAIL" type="email" inputmode="email" autocomplete="email"
                placeholder="Your work email" required aria-describedby="cta-help cta-error">
         <button type="submit" class="btn btn-gold">Claim my place</button>
       </div>

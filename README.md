@@ -55,8 +55,23 @@ After editing the script, **Deploy -> Manage deployments -> edit -> Version:
 New version**, or the live URL keeps serving the old code.
 
 The sheet keeps one row per address: a repeat signup bumps *Last seen* and
-*Submissions* rather than adding a duplicate. Rows record which form was used
-(`hero` or `closing`).
+*Submissions* rather than adding a duplicate. Columns are Email, Name, First
+seen, Last seen, Campaign, QR source, Form and Submissions.
+
+### Tracking which QR code was scanned
+
+Any `?src=` value in the URL is stored against the signup, so print a separate
+QR code per placement and you will know where each lead came from:
+
+    https://learn.thrivingtalents.com/?src=booth
+    https://learn.thrivingtalents.com/?src=talk
+
+The value is remembered for the session, so it survives the visitor scrolling
+or reloading. Signups with no `src` show as blank in the sheet and as `direct`
+in analytics. Nothing about this is visible to the visitor.
+
+For Mailchimp and Brevo the name is sent as `FNAME` / `FIRSTNAME` and the QR
+source as `QRSOURCE`; both merge fields have to exist on the list first.
 
 Two things this does not do, both of which matter once you email these people:
 there is no confirmation email (the page only promises to be in touch after

@@ -59,6 +59,17 @@
   window.addEventListener('scroll', checkDepth, { passive: true });
   window.addEventListener('load', checkDepth);
 
+  /* ---------- Where the visitor came from ---------- */
+  // Print separate QR codes with ?src=booth, ?src=talk and so on, and every
+  // signup records which one was scanned. Costs the visitor nothing.
+  var qrSource = (function () {
+    try {
+      var fromUrl = new URLSearchParams(location.search).get('src');
+      if (fromUrl) sessionStorage.setItem('tt_src', fromUrl);
+      return fromUrl || sessionStorage.getItem('tt_src') || '';
+    } catch (e) { return ''; }
+  })();
+
   /* ---------- Email capture ---------- */
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   var BUTTON_LABEL = 'Claim my place';
@@ -74,13 +85,14 @@
     }, { threshold: 0 }).observe(forms[0]);
   }
 
-  function showError(form, msg) {
+  function showError(form, msg, field) {
     var err = form.querySelector('.error');
-    var input = form.querySelector('input[type="email"]');
     err.textContent = msg;
     err.hidden = !msg;
-    input.setAttribute('aria-invalid', msg ? 'true' : 'false');
-    if (msg) input.focus();
+    form.querySelectorAll('.capture-field').forEach(function (el) {
+      el.setAttribute('aria-invalid', msg && el === field ? 'true' : 'false');
+    });
+    if (msg && field) field.focus();
   }
 
   function setBusy(form, busy) {
@@ -107,7 +119,7 @@
   }
 
   // Mailchimp only allows cross-origin submits via JSONP on the post-json endpoint.
-  function submitMailchimp(email) {
+  function submitMailchimp(name, email) {
     return new Promise(function (resolve, reject) {
       var action = cfg.mailchimpAction.replace('/post?', '/post-json?');
       var cb = 'mc_cb_' + Date.now();
@@ -120,7 +132,9 @@
         else reject(new Error((res && res.msg) ? res.msg.replace(/<[^>]+>/g, '') : 'Subscription failed'));
       };
       var s = document.createElement('script');
-      s.src = action + '&EMAIL=' + encodeURIComponent(email) + '&SOURCE=HRLC&c=' + cb;
+      s.src = action + '&EMAIL=' + encodeURIComponent(email) +
+        '&FNAME=' + encodeURIComponent(name) +
+        '&SOURCE=HRLC&QRSOURCE=' + encodeURIComponent(qrSource) + '&c=' + cb;
       s.onerror = function () { cleanup(); reject(new Error('network')); };
       document.head.appendChild(s);
     });
@@ -129,10 +143,12 @@
   // Brevo's hosted form endpoint accepts a plain form POST. It doesn't send CORS
   // headers, so we post opaquely and trust the 2xx (the confirmation email is
   // configured on the Brevo side).
-  function submitBrevo(email) {
+  function submitBrevo(name, email) {
     var fd = new FormData();
     fd.append('EMAIL', email);
+    fd.append('FIRSTNAME', name);
     fd.append('SOURCE', 'HRLC');
+    fd.append('QRSOURCE', qrSource);
     fd.append('email_address_check', ''); // Brevo honeypot
     fd.append('locale', 'en');
     return fetch(cfg.brevoAction, { method: 'POST', mode: 'no-cors', body: fd }).then(function () {});
@@ -141,10 +157,12 @@
   // Google Sheets via an Apps Script web app. A text/plain body keeps this a
   // "simple" request, so the browser skips the CORS preflight that Apps Script
   // cannot answer.
-  function submitSheet(email, location) {
+  function submitSheet(name, email, location) {
     var payload = JSON.stringify({
+      name: name,
       email: email,
       source: 'HRLC',
+      qrSource: qrSource,
       location: location,
       token: cfg.sheetsToken || ''
     });
@@ -181,30 +199,34 @@
   forms.forEach(function (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+      var nameInput = form.querySelector('input[name="NAME"]');
       var input = form.querySelector('input[type="email"]');
+      var name = (nameInput.value || '').trim().replace(/\s+/g, ' ');
       var email = (input.value || '').trim();
       if (form.querySelector('input[name="hp"]').value) return; // bot
-      if (!email) return showError(form, 'Enter your work email to claim a place.');
-      if (!EMAIL_RE.test(email)) return showError(form, 'That email doesn\'t look right. Check for typos and try again.');
+      if (name.length < 2) return showError(form, 'Enter your name so we know who to write to.', nameInput);
+      if (!email) return showError(form, 'Enter your work email to claim a place.', input);
+      if (!EMAIL_RE.test(email)) return showError(form, 'That email doesn\'t look right. Check for typos and try again.', input);
       showError(form, '');
       setBusy(form, true);
 
       var where = form.getAttribute('data-location') || 'unknown';
       var send;
-      if (cfg.emailProvider === 'sheets' && cfg.sheetsEndpoint) send = submitSheet(email, where);
-      else if (cfg.emailProvider === 'mailchimp' && cfg.mailchimpAction) send = submitMailchimp(email);
-      else if (cfg.emailProvider === 'brevo' && cfg.brevoAction) send = submitBrevo(email);
+      if (cfg.emailProvider === 'sheets' && cfg.sheetsEndpoint) send = submitSheet(name, email, where);
+      else if (cfg.emailProvider === 'mailchimp' && cfg.mailchimpAction) send = submitMailchimp(name, email);
+      else if (cfg.emailProvider === 'brevo' && cfg.brevoAction) send = submitBrevo(name, email);
       else send = submitDemo();
 
       send.then(function () {
         track('email_capture', {
           provider: cfg.emailProvider || 'none',
-          location: where
+          location: where,
+          qr_source: qrSource || 'direct'
         });
         showThanks(form);
       }).catch(function (err) {
         setBusy(form, false);
-        showError(form, 'We couldn\'t save that just now. Please try again, or come to the Thriving Talents booth and we\'ll sign you up there.');
+        showError(form, 'We couldn\'t save that just now. Please try again, or come to the Thriving Talents booth and we\'ll sign you up there.', input);
         track('email_capture_error', { message: String(err && err.message || err) });
       });
     });

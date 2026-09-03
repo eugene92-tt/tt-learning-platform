@@ -22,7 +22,7 @@
 const TOKEN = 'CHANGE-ME';
 
 const SHEET_NAME = 'Signups';
-const HEADERS = ['Email', 'First seen', 'Last seen', 'Source', 'Form', 'Submissions'];
+const HEADERS = ['Email', 'Name', 'First seen', 'Last seen', 'Campaign', 'QR source', 'Form', 'Submissions'];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 function doPost(e) {
@@ -45,14 +45,22 @@ function doPost(e) {
       const now = new Date();
       const rowIndex = findEmailRow(sheet, email);
 
+      const name = String(body.name || '').trim();
+
       if (rowIndex === -1) {
-        sheet.appendRow([email, now, now, body.source || '', body.location || '', 1]);
+        sheet.appendRow([
+          email, name, now, now,
+          body.source || '', body.qrSource || '', body.location || '', 1
+        ]);
       } else {
         // Already registered. Keep one row per person rather than adding a
         // duplicate — this also absorbs the client's retry after a blocked read.
-        sheet.getRange(rowIndex, 3).setValue(now);
-        const count = sheet.getRange(rowIndex, 6).getValue() || 1;
-        sheet.getRange(rowIndex, 6).setValue(count + 1);
+        sheet.getRange(rowIndex, 4).setValue(now);
+        if (name && !String(sheet.getRange(rowIndex, 2).getValue()).trim()) {
+          sheet.getRange(rowIndex, 2).setValue(name);
+        }
+        const count = sheet.getRange(rowIndex, 8).getValue() || 1;
+        sheet.getRange(rowIndex, 8).setValue(count + 1);
       }
     } finally {
       lock.releaseLock();
