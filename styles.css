@@ -129,17 +129,18 @@ section { padding: 56px 0; }
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
   margin-bottom: 40px;
 }
-.brand { flex: none; }
 /* The SVG carries the guide's clearspace inside its box, so the visible
-   wordmark is ~81% of these numbers. The guide's floor is 120px visible. */
-.brand img { width: 168px; }
-
-/* On the narrowest phones the row cannot hold the logo at its minimum size
-   next to the co-brand, so stack them rather than shrink below spec. */
-@media (max-width: 379px) {
-  .brandbar { flex-direction: column; align-items: flex-start; gap: 14px; }
-  .brandbar .cobrand { align-items: flex-start; text-align: left; max-width: none; }
-  .brand img { width: 156px; }
+   wordmark is ~81% of --logo-w. The guide's floor is 120px visible. */
+.brand {
+  --logo-w: 168px;
+  flex: none; display: inline-flex; flex-direction: column; align-items: flex-start; gap: 9px;
+}
+.brand img { width: var(--logo-w); }
+.brand-tagline {
+  /* indented to sit under the mark rather than the SVG's clearspace edge */
+  padding-left: calc(var(--logo-w) * .0951);
+  font-size: 13px; font-weight: 500; line-height: 1.3;
+  color: rgba(255,255,255,.60); letter-spacing: .01em;
 }
 .cobrand {
   display: inline-flex; flex-direction: column; align-items: flex-end;
@@ -381,7 +382,8 @@ section { padding: 56px 0; }
   :root { --pad: 32px; }
   section { padding: 80px 0; }
   .hero { padding: 28px 0 88px; }
-  .brand img { width: 228px; }
+  .brand { --logo-w: 228px; }
+  .brand-tagline { font-size: 14px; }
   .cobrand { max-width: none; }
   .cobrand-label { font-size: 12px; }
   .brandbar { margin-bottom: 64px; }
