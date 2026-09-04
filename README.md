@@ -42,6 +42,14 @@ the files the site actually serves live in `assets/`:
 
 - `asah-logo-on-dark.svg` — the kit's on-dark lockup with its opaque `#1A1C20`
   background rectangle removed, so it sits on the Graphite header cleanly.
+
+The header sets the logo and its tagline as one sentence: the wordmark supplies
+"asah" and the text continues "is Malay for sharpen." on the same baseline. The
+alignment is not a guess. The SVG box extends 9.211% of its width below the
+wordmark baseline, so the image carries a matching negative `margin-bottom` and
+sits in inline flow, where a replaced element's bottom margin edge lands on the
+text baseline. Flexbox is deliberately not used here: it does not honour the
+margin edge when baseline-aligning images, which leaves the tagline ~14px low.
 - `fonts/*.woff2` — Plus Jakarta Sans subset to Latin plus the accents Malaysian
   names need, 51KB for three weights instead of 387KB of TTF.
 - favicons and the app icon, copied from the kit.
