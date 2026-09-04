@@ -5,12 +5,12 @@
 window.TT_CONFIG = {
   // Email capture. 'sheets' | 'mailchimp' | 'brevo' | 'none'
   // ('none' = demo mode: the form succeeds but nothing is sent anywhere)
-  emailProvider: 'none',
+  emailProvider: 'sheets',
 
   // Google Sheets. Paste the /exec URL of the Apps Script web app deployed
   // from tools/google-apps-script.gs, and the TOKEN you set inside it.
-  sheetsEndpoint: '',
-  sheetsToken: '',
+  sheetsEndpoint: 'https://script.google.com/macros/s/AKfycbwVn8uGJd8P0TliSbACuH68KY8o2-5zi17GthLxdfUbvacUHYUTcs63736iY72EMr2D/exec',
+  sheetsToken: 'ASAH-TT',
 
   // Mailchimp: the "action" URL from Audience → Signup forms → Embedded forms.
   // Looks like: https://thrivingtalents.us21.list-manage.com/subscribe/post?u=XXXX&id=YYYY
