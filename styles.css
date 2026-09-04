@@ -1,30 +1,48 @@
 /* ==========================================================================
    Thriving Talents Learning Platform — HRLC landing page
-   Brand tokens pulled from the TT logo: navy #101C3E, gold #FDB72E
+   Asah palette: Graphite #23262B, Spark #F0552E, Stone #5C6B78
    Mobile-first. Primary viewport 320–430px, responsive up to desktop.
    ========================================================================== */
 
 :root {
-  --navy: #101C3E;
-  --navy-800: #182752;
-  --navy-700: #23336A;
-  --navy-ink: #0B1330;
-  --gold: #FDB72E;
-  --gold-600: #E5A114;
-  --gold-100: #FFF3D6;
-  --ink: #101C3E;
-  --ink-2: #3E4763;
-  --ink-3: #6B7391;
-  --line: #E3E6EF;
+  /* Asah palette. Graphite is steel, Spark is what flies off the whetstone,
+     Stone is the whetstone. Spark is reserved for the mark and one accent;
+     it is never used for body text (it only reaches 3.4:1 on white). */
+  --graphite: #23262B;
+  --night: #1A1C20;
+  --spark: #F0552E;
+  --spark-600: #D8431D;
+  --stone: #5C6B78;
+  --tint: #E9EEF1;
+
+  --ink: #23262B;
+  --ink-2: #46535E;
+  --ink-3: #5C6B78;
+  --line: #D9E1E6;
   --bg: #FFFFFF;
-  --bg-2: #F5F6FA;
+  --bg-2: #F4F7F9;
   --white: #FFFFFF;
   --radius: 14px;
   --radius-sm: 10px;
   --wrap: 1080px;
   --pad: 20px;
-  --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --shadow: 0 10px 30px rgba(16, 28, 62, .10);
+  --font: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --shadow: 0 10px 30px rgba(35, 38, 43, .10);
+}
+
+/* Plus Jakarta Sans, subset to Latin plus the accents Malaysian names need.
+   The kit ships Medium as its lightest weight, so body copy is 500. */
+@font-face {
+  font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 500;
+  src: url("/assets/fonts/asah-medium.woff2") format("woff2"); font-display: swap;
+}
+@font-face {
+  font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 600;
+  src: url("/assets/fonts/asah-semibold.woff2") format("woff2"); font-display: swap;
+}
+@font-face {
+  font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 700;
+  src: url("/assets/fonts/asah-bold.woff2") format("woff2"); font-display: swap;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -34,7 +52,8 @@ html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 body {
   margin: 0;
   font-family: var(--font);
-  font-size: 16px;               /* PRD: 16px minimum on mobile */
+  font-size: 16px;
+  font-weight: 500;          /* Medium is the lightest weight in the kit */               /* PRD: 16px minimum on mobile */
   line-height: 1.55;
   color: var(--ink);
   background: var(--bg);
@@ -53,7 +72,7 @@ h1, h2, h3, p { margin: 0; }
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 .skip {
-  position: absolute; left: -999px; top: 8px; background: var(--gold); color: var(--navy);
+  position: absolute; left: -999px; top: 8px; background: var(--spark); color: var(--white);
   padding: 10px 14px; border-radius: 8px; z-index: 100; font-weight: 600;
 }
 .skip:focus { left: 8px; }
@@ -69,10 +88,10 @@ h1, h2, h3, p { margin: 0; }
   transition: transform .08s ease, background .15s ease, box-shadow .15s ease;
 }
 .btn:active { transform: translateY(1px); }
-.btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
-.btn-gold { background: var(--gold); color: var(--navy); }
-.btn-gold:hover { background: #FFC23F; box-shadow: 0 6px 18px rgba(253, 183, 46, .35); }
-.btn-gold[disabled] { opacity: .7; cursor: progress; }
+.btn:focus-visible { outline: 3px solid var(--spark); outline-offset: 3px; }
+.btn-spark { background: var(--spark); color: var(--night); }
+.btn-spark:hover { background: var(--spark-600); color: var(--white); box-shadow: 0 6px 18px rgba(240, 85, 46, .35); }
+.btn-spark[disabled] { opacity: .7; cursor: progress; }
 .btn-outline-light { background: transparent; color: var(--white); border-color: rgba(255,255,255,.55); }
 .btn-outline-light:hover { border-color: var(--white); background: rgba(255,255,255,.06); }
 .btn-lg { min-height: 56px; padding: 14px 32px; font-size: 18px; }
@@ -80,11 +99,11 @@ h1, h2, h3, p { margin: 0; }
 /* ---------- Section rhythm ---------- */
 section { padding: 56px 0; }
 .section-h {
-  font-size: clamp(24px, 5.5vw, 34px); line-height: 1.15; font-weight: 800;
+  font-size: clamp(24px, 5.5vw, 34px); line-height: 1.15; font-weight: 700;
   letter-spacing: -.01em; margin-bottom: 28px;
 }
 .kicker {
-  color: var(--gold-600); font-weight: 700; font-size: 14px;
+  color: var(--stone); font-weight: 700; font-size: 14px;
   text-transform: uppercase; letter-spacing: .12em; margin-bottom: 10px;
 }
 .fineprint { color: var(--ink-3); font-size: 14px; margin-top: 18px; }
@@ -94,14 +113,14 @@ section { padding: 56px 0; }
    ========================================================================== */
 .hero {
   position: relative; overflow: hidden;
-  background: var(--navy); color: var(--white);
+  background: var(--graphite); color: var(--white);
   padding: 22px 0 56px;
 }
 .hero::before {
-  /* gold star glow, echoes the logo mark */
+  /* Spark glow, echoing the mark */
   content: ""; position: absolute; inset: auto -20% -40% auto;
   width: 70vw; max-width: 620px; aspect-ratio: 1;
-  background: radial-gradient(circle at center, rgba(253,183,46,.28), rgba(253,183,46,0) 62%);
+  background: radial-gradient(circle at center, rgba(240,85,46,.26), rgba(240,85,46,0) 62%);
   pointer-events: none;
 }
 .hero .wrap { position: relative; }
@@ -110,7 +129,18 @@ section { padding: 56px 0; }
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
   margin-bottom: 40px;
 }
+.brand { flex: none; }
+/* The SVG carries the guide's clearspace inside its box, so the visible
+   wordmark is ~81% of these numbers. The guide's floor is 120px visible. */
 .brand img { width: 168px; }
+
+/* On the narrowest phones the row cannot hold the logo at its minimum size
+   next to the co-brand, so stack them rather than shrink below spec. */
+@media (max-width: 379px) {
+  .brandbar { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .brandbar .cobrand { align-items: flex-start; text-align: left; max-width: none; }
+  .brand img { width: 156px; }
+}
 .cobrand {
   display: inline-flex; flex-direction: column; align-items: flex-end;
   gap: 1px; text-align: right; max-width: 132px;
@@ -122,11 +152,11 @@ section { padding: 56px 0; }
 .cobrand-logo { height: 21px; width: auto; display: block; }
 
 .eyebrow {
-  color: var(--gold); font-weight: 700; font-size: 14px; letter-spacing: .1em;
+  color: rgba(255,255,255,.72); font-weight: 700; font-size: 14px; letter-spacing: .1em;
   text-transform: uppercase; margin-bottom: 14px;
 }
 .hero h1 {
-  font-size: clamp(36px, 10vw, 64px); line-height: 1.02; font-weight: 800;
+  font-size: clamp(36px, 10vw, 64px); line-height: 1.02; font-weight: 700;
   letter-spacing: -.025em; margin-bottom: 18px;
 }
 .lede { font-size: 18px; line-height: 1.5; color: rgba(255,255,255,.82); max-width: 560px; margin-bottom: 28px; }
@@ -134,13 +164,13 @@ section { padding: 56px 0; }
 .scarcity {
   display: inline-flex; align-items: center; gap: 8px;
   font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
-  color: var(--gold); background: rgba(253,183,46,.12);
-  border: 1px solid rgba(253,183,46,.35); border-radius: 999px;
+  color: var(--white); background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.18); border-radius: 999px;
   padding: 6px 14px; margin-bottom: 16px;
 }
 .scarcity::before {
   content: ""; width: 7px; height: 7px; border-radius: 50%;
-  background: var(--gold); flex: none;
+  background: var(--spark); flex: none;
 }
 
 /* Email capture */
@@ -154,7 +184,7 @@ section { padding: 56px 0; }
 }
 .capture > .capture-field { margin-bottom: 10px; }
 .capture input::placeholder { color: rgba(255,255,255,.55); }
-.capture input:focus { outline: none; border-color: var(--gold); background: rgba(255,255,255,.12); }
+.capture input:focus { outline: none; border-color: var(--spark); background: rgba(255,255,255,.12); }
 .capture input[aria-invalid="true"] { border-color: #FF8A8A; }
 .capture .btn { width: 100%; }
 .help { font-size: 14px; color: rgba(255,255,255,.65); margin-top: 12px; }
@@ -165,9 +195,9 @@ section { padding: 56px 0; }
 .thanks:focus { outline: none; }
 .thanks-icon {
   width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
-  background: var(--gold); color: var(--navy); font-weight: 900; font-size: 22px; margin-bottom: 14px;
+  background: var(--spark); color: var(--white); font-weight: 700; font-size: 22px; margin-bottom: 14px;
 }
-.thanks h2 { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+.thanks h2 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
 .thanks p { color: rgba(255,255,255,.82); }
 .thanks-cta { display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
 
@@ -180,8 +210,8 @@ section { padding: 56px 0; }
 .stat {
   min-width: 0;
   background: var(--white); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 20px 16px; box-shadow: 0 2px 0 rgba(16,28,62,.03);
-  border-top: 4px solid var(--gold);
+  padding: 20px 16px; box-shadow: 0 2px 0 rgba(35,38,43,.04);
+  border-top: 4px solid var(--graphite);
 }
 /* Fixed height so every label starts on the same line, whatever the
    figure above it is set at. */
@@ -189,10 +219,10 @@ section { padding: 56px 0; }
   --fig: clamp(30px, 9vw, 44px);
   display: flex; align-items: baseline; flex-wrap: nowrap; min-width: 0;
   height: clamp(34px, 9.4vw, 48px);
-  color: var(--navy); font-variant-numeric: tabular-nums lining-nums;
+  color: var(--graphite); font-variant-numeric: tabular-nums lining-nums;
 }
 .stat-v {
-  font-size: var(--fig); font-weight: 800; line-height: 1;
+  font-size: var(--fig); font-weight: 700; line-height: 1;
   letter-spacing: -.03em;
 }
 /* Every figure is set at one size. A range needs about twice the width, so
@@ -225,38 +255,38 @@ section { padding: 56px 0; }
   border: 1px solid var(--line); border-radius: var(--radius); padding: 18px;
   background: var(--white);
 }
-.tool h3 { font-size: 22px; font-weight: 800; margin: 16px 0 6px; }
+.tool h3 { font-size: 22px; font-weight: 700; margin: 16px 0 6px; }
 .tool h3::before {
   content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 2px;
-  background: var(--gold); margin-right: 10px; transform: rotate(45deg); vertical-align: 2px;
+  background: var(--graphite); margin-right: 10px; transform: rotate(45deg); vertical-align: 2px;
 }
 .tool p { color: var(--ink-2); }
 
 /* CSS-drawn product previews (no stock photos; swap for frntlne screenshots) */
 .tool-ui {
-  background: var(--navy); border-radius: var(--radius-sm); padding: 14px;
+  background: var(--graphite); border-radius: var(--radius-sm); padding: 14px;
   min-height: 132px; display: flex; flex-direction: column; gap: 10px; justify-content: center;
 }
 .ui-bar { display: flex; gap: 6px; }
 .ui-bar i { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.25); }
-.ui-bar i:first-child { background: var(--gold); }
+.ui-bar i:first-child { background: var(--spark); }
 .ui-progress { height: 10px; border-radius: 6px; background: rgba(255,255,255,.14); overflow: hidden; }
-.ui-progress b { display: block; height: 100%; background: var(--gold); border-radius: 6px; }
+.ui-progress b { display: block; height: 100%; background: var(--spark); border-radius: 6px; }
 .ui-lines { display: flex; flex-direction: column; gap: 7px; }
 .ui-lines i { height: 8px; border-radius: 4px; background: rgba(255,255,255,.22); }
 .ui-chat { display: flex; flex-direction: column; gap: 8px; font-size: 13px; line-height: 1.35; }
 .ui-chat span { padding: 8px 11px; border-radius: 12px; max-width: 88%; }
-.ui-chat .me { align-self: flex-end; background: var(--gold); color: var(--navy); font-weight: 600; border-bottom-right-radius: 3px; }
+.ui-chat .me { align-self: flex-end; background: var(--spark); color: var(--white); font-weight: 600; border-bottom-right-radius: 3px; }
 .ui-chat .bot { align-self: flex-start; background: rgba(255,255,255,.14); color: var(--white); border-bottom-left-radius: 3px; }
 .ui-card {
   display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px;
   background: rgba(255,255,255,.10); color: var(--white); font-size: 13px; font-weight: 600;
 }
 .ui-card i { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,.4); flex: none; }
-.ui-card .ui-check { background: var(--gold); border-color: var(--gold); position: relative; }
+.ui-card .ui-check { background: var(--spark); border-color: var(--spark); position: relative; }
 .ui-card .ui-check::after {
   content: ""; position: absolute; left: 4px; top: 1px; width: 4px; height: 8px;
-  border: solid var(--navy); border-width: 0 2px 2px 0; transform: rotate(45deg);
+  border: solid var(--white); border-width: 0 2px 2px 0; transform: rotate(45deg);
 }
 
 /* ==========================================================================
@@ -270,19 +300,19 @@ section { padding: 56px 0; }
 }
 .aud-tag {
   display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-  color: var(--navy); background: var(--gold-100); padding: 5px 10px; border-radius: 999px; margin-bottom: 12px;
+  color: var(--graphite); background: var(--tint); padding: 5px 10px; border-radius: 999px; margin-bottom: 12px;
 }
-.aud-card h3 { font-size: 22px; line-height: 1.2; font-weight: 800; margin-bottom: 10px; }
+.aud-card h3 { font-size: 22px; line-height: 1.2; font-weight: 700; margin-bottom: 10px; }
 .aud-card p { color: var(--ink-2); }
 .ticks { margin-top: 16px; display: grid; gap: 8px; }
 .ticks li { position: relative; padding-left: 28px; font-weight: 500; }
 .ticks li::before {
   content: ""; position: absolute; left: 0; top: 3px; width: 18px; height: 18px; border-radius: 50%;
-  background: var(--gold);
+  background: var(--graphite);
 }
 .ticks li::after {
   content: ""; position: absolute; left: 6px; top: 6px; width: 5px; height: 9px;
-  border: solid var(--navy); border-width: 0 2px 2px 0; transform: rotate(45deg);
+  border: solid var(--white); border-width: 0 2px 2px 0; transform: rotate(45deg);
 }
 
 /* ==========================================================================
@@ -312,17 +342,17 @@ section { padding: 56px 0; }
 /* ==========================================================================
    6. DEMO CTA + FOOTER
    ========================================================================== */
-.closing { background: var(--navy); color: var(--white); text-align: center; padding: 64px 0; }
-.closing h2 { font-size: clamp(28px, 7vw, 40px); font-weight: 800; letter-spacing: -.02em; margin-bottom: 12px; }
+.closing { background: var(--graphite); color: var(--white); text-align: center; padding: 64px 0; }
+.closing h2 { font-size: clamp(28px, 7vw, 40px); font-weight: 700; letter-spacing: -.02em; margin-bottom: 12px; }
 .closing [data-closing-intro] p { color: rgba(255,255,255,.82); max-width: 560px; margin: 0 auto 24px; }
 .capture-center, .thanks-center { margin-left: auto; margin-right: auto; text-align: left; }
 .thanks-center { max-width: 560px; }
 
-.foot { background: var(--navy-ink); color: rgba(255,255,255,.75); padding: 32px 0 96px; font-size: 14px; }
+.foot { background: var(--night); color: rgba(255,255,255,.75); padding: 32px 0 96px; font-size: 14px; }
 .foot-brand { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; margin-bottom: 18px; }
 .foot-brand > img { width: 150px; }
 .foot-brand .cobrand { align-items: flex-start; text-align: left; max-width: none; }
-.foot a { color: var(--gold); text-decoration: none; }
+.foot a { color: var(--white); text-decoration: underline; text-underline-offset: 3px; }
 .foot a:hover { text-decoration: underline; }
 .foot-text { margin-bottom: 12px; }
 .foot-legal { font-size: 13px; color: rgba(255,255,255,.5); }
@@ -331,7 +361,7 @@ section { padding: 56px 0; }
 .sticky-cta {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
   padding: 10px var(--pad) calc(10px + env(safe-area-inset-bottom));
-  background: rgba(16,28,62,.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  background: rgba(35,38,43,.94); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   border-top: 1px solid rgba(255,255,255,.12);
 }
 .sticky-cta .btn { width: 100%; }
@@ -351,7 +381,7 @@ section { padding: 56px 0; }
   :root { --pad: 32px; }
   section { padding: 80px 0; }
   .hero { padding: 28px 0 88px; }
-  .brand img { width: 210px; }
+  .brand img { width: 228px; }
   .cobrand { max-width: none; }
   .cobrand-label { font-size: 12px; }
   .brandbar { margin-bottom: 64px; }
