@@ -45,8 +45,8 @@ function confirmationText(name) {
   return [
     name ? 'Hi ' + name + ',' : 'Hi,',
     'Thanks for registering your interest in Asah, the Thriving Talents Learning Platform. Your place in the first cohort is reserved.',
-    'Someone from our team will be in touch by the end of this week to walk you through the platform and answer anything you want to ask before you commit to it.',
     'Asah programmes are HRD Corp claimable. If you tell us your levy situation when we speak, we will point you at the scheme that fits.',
+    'Someone from our team will be in touch by the end of this week to walk you through the platform and answer anything you want to ask before you commit to it.',
     'If you need us sooner, just reply to this email.',
     'Thriving Talents\n' + REPLY_TO,
     '--\nYou are receiving this because you registered on the Asah early access page. Reply with "unsubscribe" and we will remove you.'
