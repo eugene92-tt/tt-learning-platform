@@ -102,7 +102,44 @@ New version**, or the live URL keeps serving the old code.
 
 The sheet keeps one row per address: a repeat signup bumps *Last seen* and
 *Submissions* rather than adding a duplicate. Columns are Email, Name, First
-seen, Last seen, Campaign, QR source, Form and Submissions.
+seen, Last seen, Campaign, QR source, Form, Submissions and Confirmation.
+
+### The confirmation email
+
+The same script sends the confirmation, so there is no email tool to buy or
+connect. On a first-time signup it emails the person immediately, then writes
+the send time into the **Confirmation** column. The column is the record of who
+has actually been written to: a timestamp means sent, anything else means not.
+
+Settings live in the `CONFIRMATION` block at the top of the script —
+`SEND_CONFIRMATION` (set `false` to turn it off without removing anything),
+`FROM_NAME`, `REPLY_TO`, `SUBJECT`, and `confirmationText()` for the body
+itself. The body promises contact by the end of the week because the page does;
+change one and change the other.
+
+Four things about this are deliberate:
+
+- **Only new signups get mail.** The browser retries opaquely when it cannot
+  read our reply, so a second POST for the same address is normal. It bumps the
+  row and sends nothing.
+- **A mail failure never loses the signup.** The row is written and the lock
+  released before the send is attempted; a failure writes `failed: …` into the
+  Confirmation column and the request still returns `ok`.
+- **Quota is handled, not ignored.** Apps Script allows 100 recipients a day on
+  a consumer Gmail account and 1,500 on Workspace. When the quota is gone the
+  row is marked `quota exhausted` rather than dropped, and `doGet()` reports
+  the remaining quota so you can check it before a busy day.
+- **There is a way to catch up.** Run `resendMissingConfirmations()` from the
+  Apps Script editor and it retries every row that is not already stamped with
+  a date. It is safe to run twice.
+
+`previewConfirmation()` sends one copy to whoever owns the script, so you can
+read the real email before the QR codes are printed. Do that first.
+
+Mail goes out as the Google account that owns the script, so deploy it from a
+Thriving Talents Workspace account. Deployed from a personal Gmail address, the
+confirmation arrives from a gmail.com sender claiming to be Thriving Talents,
+which is both bad for trust and likely to be filtered.
 
 ### Tracking which QR code was scanned
 
@@ -119,12 +156,16 @@ in analytics. Nothing about this is visible to the visitor.
 For Mailchimp and Brevo the name is sent as `FNAME` / `FIRSTNAME` and the QR
 source as `QRSOURCE`; both merge fields have to exist on the list first.
 
-Two things this does not do, both of which matter once you email these people:
-there is no confirmation email, and there is no unsubscribe link, so the footer's "unsubscribe any time"
-has to be honoured by hand or by moving the list into a proper email tool. The page
-now promises contact **by the end of the week**, which is a commitment someone has to
-keep: either an autoresponder goes in before the QR codes are printed, or a named
-person works the sheet every Friday.
+What this still does not do: there is no unsubscribe *link*. The confirmation
+asks people to reply with "unsubscribe", which someone has to actually action by
+hand, and the footer's "unsubscribe any time" is only as true as that habit. The
+first time you send a real campaign to this list rather than a one-to-one
+confirmation, move it into Mailchimp or Brevo — a bulk send with no one-click
+unsubscribe is what gets a sending domain flagged.
+
+The confirmation buys you the week; it does not do the follow-up. The page
+promises contact **by the end of the week** and only a person can keep that, so
+name who works the sheet before the QR codes are printed.
 
 ## Analytics events
 
