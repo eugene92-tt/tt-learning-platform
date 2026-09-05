@@ -1,8 +1,13 @@
-# Asah — HRLC landing page
+# Asah — early access landing page
 
 Asah is the Thriving Talents Learning Platform, powered by frntlne.
 
-Single static page for the HRLC booth QR code. Plain HTML, CSS and vanilla JS. No build step.
+Single static page behind the booth QR code. Plain HTML, CSS and vanilla JS. No build step.
+
+The page deliberately names no event. Every promise to the visitor is "we'll get in
+touch with you soon" — keep it that way unless the event is confirmed as a
+sponsor-level mention, since naming a conference on a public page is a claim about
+association with it.
 
 ```
 index.html   page markup (six sections per the PRD)
@@ -33,7 +38,9 @@ Both forms register interest for early access rather than delivering a lead magn
 The page has two identical capture forms (hero and closing section); submitting either
 switches both to the thank-you state. Any confirmation or
 welcome email is configured inside Mailchimp/Brevo (automation on the list/form), not in this repo.
-Submissions are tagged `SOURCE=HRLC` so booth signups can be segmented later.
+Submissions are tagged `SOURCE=ASAH` so this campaign's signups can be segmented
+later. Which QR code was scanned is recorded separately as `QRSOURCE` (see below),
+so per-event reporting does not need the event named on the page.
 
 ## Branding
 
@@ -113,8 +120,8 @@ For Mailchimp and Brevo the name is sent as `FNAME` / `FIRSTNAME` and the QR
 source as `QRSOURCE`; both merge fields have to exist on the list first.
 
 Two things this does not do, both of which matter once you email these people:
-there is no confirmation email (the page only promises to be in touch after
-HRLC), and there is no unsubscribe link, so the footer's "unsubscribe any time"
+there is no confirmation email (the page only promises to be in touch soon),
+and there is no unsubscribe link, so the footer's "unsubscribe any time"
 has to be honoured by hand or by moving the list into a proper email tool.
 
 ## Analytics events
@@ -138,7 +145,7 @@ any light background.
 
 In the footer the frntlne credit is a co-brand, not a peer: `.cobrand-logo` is fixed at
 15px tall against the TT logo's 47px, so it reads at about a third of TT's height, the
-same proportion the HRLC flyer uses. Change it in `.cobrand-logo`, not on `.foot-brand
+same proportion the printed flyer uses. Change it in `.cobrand-logo`, not on `.foot-brand
 img` — that selector is deliberately `>`-scoped to the direct child so it cannot stretch
 the nested frntlne file to the wrong aspect ratio.
 
@@ -155,10 +162,11 @@ to any new logo that arrives with built-in margin.
 The masters are 17,344px and 3,601px square and are excluded in `.vercelignore` — they
 must not ship. Regenerate the web copies from the masters rather than upscaling these.
 
-The `.hrdc` strip sits under the client logo wall and carries the flyer's line: **"HRD
-Corp claimable. Ask us at the booth which scheme fits your levy balance."** This is a
-claim about TT's HRD Corp registration, so keep the wording as HRD Corp approves it —
-"claimable" describes the programme, not a guarantee of any particular levy approval.
+The `.hrdc` strip sits under the client logo wall and carries the flyer's line: **"HRD Corp
+claimable. Drop us your email so we can explain which scheme can be used to claim
+this."** This is a claim about TT's HRD Corp registration, so keep the wording as HRD
+Corp approves it — "claimable" describes the programme, not a guarantee that any
+particular levy claim will be approved.
 
 ## Content still to swap in
 

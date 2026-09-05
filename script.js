@@ -61,7 +61,8 @@
 
   /* ---------- Where the visitor came from ---------- */
   // Print separate QR codes with ?src=booth, ?src=talk and so on, and every
-  // signup records which one was scanned. Costs the visitor nothing.
+  // signup records which one was scanned. Costs the visitor nothing. Nothing
+  // here is shown to the visitor; it only tags the row in the sheet.
   var qrSource = (function () {
     try {
       var fromUrl = new URLSearchParams(location.search).get('src');
@@ -134,7 +135,7 @@
       var s = document.createElement('script');
       s.src = action + '&EMAIL=' + encodeURIComponent(email) +
         '&FNAME=' + encodeURIComponent(name) +
-        '&SOURCE=HRLC&QRSOURCE=' + encodeURIComponent(qrSource) + '&c=' + cb;
+        '&SOURCE=ASAH&QRSOURCE=' + encodeURIComponent(qrSource) + '&c=' + cb;
       s.onerror = function () { cleanup(); reject(new Error('network')); };
       document.head.appendChild(s);
     });
@@ -147,7 +148,7 @@
     var fd = new FormData();
     fd.append('EMAIL', email);
     fd.append('FIRSTNAME', name);
-    fd.append('SOURCE', 'HRLC');
+    fd.append('SOURCE', 'ASAH');
     fd.append('QRSOURCE', qrSource);
     fd.append('email_address_check', ''); // Brevo honeypot
     fd.append('locale', 'en');
@@ -161,7 +162,7 @@
     var payload = JSON.stringify({
       name: name,
       email: email,
-      source: 'HRLC',
+      source: 'ASAH',
       qrSource: qrSource,
       location: location,
       token: cfg.sheetsToken || ''
@@ -226,7 +227,7 @@
         showThanks(form);
       }).catch(function (err) {
         setBusy(form, false);
-        showError(form, 'We couldn\'t save that just now. Please try again, or come to the Thriving Talents booth and we\'ll sign you up there.', input);
+        showError(form, 'We couldn\'t save that just now. Please try again, or email sales@thrivingtalents.com and we\'ll sign you up.', input);
         track('email_capture_error', { message: String(err && err.message || err) });
       });
     });

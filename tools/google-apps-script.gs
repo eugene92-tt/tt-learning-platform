@@ -1,5 +1,5 @@
 /**
- * Thriving Talents Learning Platform — HRLC signup capture.
+ * Thriving Talents Learning Platform — Asah signup capture.
  *
  * Receives signups from the landing page and appends them to this
  * spreadsheet. See README.md ("Collecting signups in Google Sheets") for
@@ -75,7 +75,7 @@ function doPost(e) {
 // Visiting the /exec URL in a browser should say "ok" — a quick way to check
 // the deployment is live before the booth opens.
 function doGet() {
-  return json({ ok: true, service: 'tt-hrlc-signups' });
+  return json({ ok: true, service: 'tt-asah-signups' });
 }
 
 function getSheet() {
