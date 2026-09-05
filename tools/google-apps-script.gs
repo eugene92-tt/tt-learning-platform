@@ -42,7 +42,7 @@ const HTML_EMAIL = true;
 // Where the logo is fetched from. Point it at the deployed site with no
 // trailing slash. Leave it empty and the email still sends, wordmark set as
 // text instead of an image.
-const SITE_URL  = 'https://learn.thrivingtalents.com';
+const SITE_URL  = 'https://asah.thrivingtalents.com';
 const LOGO_PATH = '/assets/asah-email-logo.png';
 
 // The page promises contact by the end of the week, so this email has to

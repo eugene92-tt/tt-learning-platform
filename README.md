@@ -150,6 +150,11 @@ piece of attacker-controlled text in the message.
 transparent, generated from `assets/asah-logo-on-dark.svg`. It has to stay
 publicly reachable at `SITE_URL + LOGO_PATH` or the embed falls back to text.
 
+`SITE_URL` is `https://asah.thrivingtalents.com`. It is the one setting that has
+to match the live domain: point it somewhere unreachable and the email still
+sends, silently, with a text wordmark instead of the logo. `index.html` uses the
+same host for its canonical URL and Open Graph tags, which have to be absolute.
+
 Four things about this are deliberate:
 
 - **Only new signups get mail.** The browser retries opaquely when it cannot
@@ -179,8 +184,8 @@ which is both bad for trust and likely to be filtered.
 Any `?src=` value in the URL is stored against the signup, so print a separate
 QR code per placement and you will know where each lead came from:
 
-    https://learn.thrivingtalents.com/?src=booth
-    https://learn.thrivingtalents.com/?src=talk
+    https://asah.thrivingtalents.com/?src=booth
+    https://asah.thrivingtalents.com/?src=talk
 
 The value is remembered for the session, so it survives the visitor scrolling
 or reloading. Signups with no `src` show as blank in the sheet and as `direct`
@@ -258,4 +263,4 @@ npx serve .
 
 ## Deploy
 
-Push to `main`; Vercel builds from the repo root with no framework preset. Add the custom domain (`learn.thrivingtalents.com` or `platform.thrivingtalents.com`) in the Vercel project and create the CNAME at the DNS provider.
+Push to `main`; Vercel builds from the repo root with no framework preset. Add the custom domain (`asah.thrivingtalents.com`) in the Vercel project and create the CNAME at the DNS provider.
