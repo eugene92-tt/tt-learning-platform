@@ -1,0 +1,8 @@
+# Source brand kit: the master files and the written brand guide stay in the
+# repo for the team but are not served. The guide names clearance work that is
+# still outstanding, so it must not be reachable from a public URL.
+assets/asah-brand-kit/
+
+# Tooling and notes, not part of the site
+tools/
+README.md

@@ -1,10 +1,12 @@
-# Thriving Talents Learning Platform — HRLC landing page
+# Asah — HRLC landing page
+
+Asah is the Thriving Talents Learning Platform, powered by frntlne.
 
 Single static page for the HRLC booth QR code. Plain HTML, CSS and vanilla JS. No build step.
 
 ```
 index.html   page markup (six sections per the PRD)
-styles.css   styles, TT brand tokens at the top (navy #101C3E, gold #FDB72E)
+styles.css   styles, Asah tokens at the top (Graphite #23262B, Spark #F0552E, Stone #5C6B78)
 config.js    the only file to edit before launch: email tool, Calendly, analytics
 script.js    form handling, analytics events, scroll depth, sticky CTA
 assets/      TT logo (colour + white), frntlne logo, favicon, OG image
@@ -32,6 +34,43 @@ The page has two identical capture forms (hero and closing section); submitting 
 switches both to the thank-you state. Any confirmation or
 welcome email is configured inside Mailchimp/Brevo (automation on the list/form), not in this repo.
 Submissions are tagged `SOURCE=HRLC` so booth signups can be segmented later.
+
+## Branding
+
+The page uses the Asah identity from `assets/asah-brand-kit/`. Working copies of
+the files the site actually serves live in `assets/`:
+
+- `asah-logo-on-dark.svg` — the kit's on-dark lockup with its opaque `#1A1C20`
+  background rectangle removed, so it sits on the Graphite header cleanly.
+
+The header sets the logo and its tagline as one sentence: the wordmark supplies
+"asah" and the text continues "is Malay for sharpen." on the same baseline. The
+alignment is not a guess. The SVG box extends 9.211% of its width below the
+wordmark baseline, so the image carries a matching negative `margin-bottom` and
+sits in inline flow, where a replaced element's bottom margin edge lands on the
+text baseline. Flexbox is deliberately not used here: it does not honour the
+margin edge when baseline-aligning images, which leaves the tagline ~14px low.
+- `fonts/*.woff2` — Plus Jakarta Sans subset to Latin plus the accents Malaysian
+  names need, 51KB for three weights instead of 387KB of TTF.
+- favicons and the app icon, copied from the kit.
+
+Spark is used for the mark, the primary button, focus states and the product
+mockups only. It is never used for body text: on white it reaches 3.4:1, well
+under the 4.5:1 needed. The button pairs Spark with Night rather than Graphite,
+which clears 4.8:1.
+
+Two faults in the supplied kit, worth fixing at source:
+
+1. `asah-logo-horizontal-tagline-on-dark.svg` is byte-identical to the
+   non-tagline file — the dark tagline lockup has no tagline. The light version
+   is correct. The page does not use it, since the frntlne credit is set
+   separately as "Powered by exclusive partner" with the real frntlne logo.
+2. The on-dark lockups include an opaque `#1A1C20` background rectangle, so they
+   show a visible box on any background that is not exactly Night.
+
+`.vercelignore` keeps `assets/asah-brand-kit/` out of the deploy. The brand guide
+in there states the name has not been cleared and lists the MyIPO, SSM and domain
+checks still outstanding, so it must not be reachable from a public URL.
 
 ## Collecting signups in Google Sheets
 
