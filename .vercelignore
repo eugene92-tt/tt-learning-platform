@@ -3,6 +3,11 @@
 # still outstanding, so it must not be reachable from a public URL.
 assets/asah-brand-kit/
 
+# Print-resolution HRD Corp masters (17,344px, 4MB). The site serves the
+# optimised hrdc-*.png copies instead.
+assets/HRD Corp - Claimable Logo.png
+assets/Logo Training Provider_Logo Registered Training Provider.png
+
 # Tooling and notes, not part of the site
 tools/
 README.md

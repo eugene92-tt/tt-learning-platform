@@ -136,6 +136,30 @@ With `emailProvider: 'none'` every event is also logged to the browser console f
 recoloured to white. The stacked ribbon mark is untouched. Use the full-colour file on
 any light background.
 
+In the footer the frntlne credit is a co-brand, not a peer: `.cobrand-logo` is fixed at
+15px tall against the TT logo's 47px, so it reads at about a third of TT's height, the
+same proportion the HRLC flyer uses. Change it in `.cobrand-logo`, not on `.foot-brand
+img` — that selector is deliberately `>`-scoped to the direct child so it cannot stretch
+the nested frntlne file to the wrong aspect ratio.
+
+`assets/logos/rieckermann-logo.svg` ships from the brand owner with roughly 25% empty
+padding above and below the artwork inside a `0 0 300 100` viewBox. The logo wall sizes
+every logo by height, so that padding made it render at half the optical weight of the
+others. The viewBox is tightened to the ink bounds (`24.1 26.2 251.2 49.3`). Do the same
+to any new logo that arrives with built-in margin.
+
+### HRD Corp badges
+
+`assets/hrdc-claimable.png` and `assets/hrdc-registered.png` are 160×160 web copies
+(7KB and 9KB) generated from the print masters supplied in the repo root of `assets/`.
+The masters are 17,344px and 3,601px square and are excluded in `.vercelignore` — they
+must not ship. Regenerate the web copies from the masters rather than upscaling these.
+
+The `.hrdc` strip sits under the client logo wall and carries the flyer's line: **"HRD
+Corp claimable. Ask us at the booth which scheme fits your levy balance."** This is a
+claim about TT's HRD Corp registration, so keep the wording as HRD Corp approves it —
+"claimable" describes the programme, not a guarantee of any particular levy approval.
+
 ## Content still to swap in
 
 - **Client logo wall.** Section 5 shows one unlabelled wall of logos from `assets/logos/`: Google, Coca-Cola, P&G, L'Oreal, Ryanair, Versace, Michael Kors, Rieckermann. These are frntlne's clients, and the wall does not say so — confirm with Datuk that TT is cleared to display them before the production deploy. To add or remove one, edit the single `<li>` in the `.logo-wall` list and drop the file into `assets/logos/`. Give it a size class by shape: `lw-sq` (square), `lw-m` (about 3:1), `lw-w` (about 5:1), `lw-xw` (8:1 or wider) — this keeps every logo at a similar optical weight.
