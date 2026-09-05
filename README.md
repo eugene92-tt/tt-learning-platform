@@ -150,6 +150,21 @@ piece of attacker-controlled text in the message.
 transparent, generated from `assets/asah-logo-on-dark.svg`. It has to stay
 publicly reachable at `SITE_URL + LOGO_PATH` or the embed falls back to text.
 
+### The share card
+
+`assets/og-image.jpg` is the 1200x630 Open Graph card. Its source is
+`tools/og-image.html` — open that at exactly 1200x630, screenshot at 2x, then
+downsample and save as JPEG q88. The 2x render is what keeps the wordmark edges
+clean once JPEG has had it.
+
+It follows the same rules as everything else on-brand: flat Graphite ground (the
+guide's Don't list rules out gradients and glows), the header lockup with its
+tagline, and exactly one Spark accent — the rule along the bottom. The right
+column carries the HRD Corp badge rather than a decorative mark, on the white
+disc it is drawn for: navy artwork straight onto Graphite goes muddy and the
+ring type disappears. A shared link is skimmed in a WhatsApp group, and the
+thing that earns the tap is the credential, not ornament.
+
 `SITE_URL` is `https://asah.thrivingtalents.com`. It is the one setting that has
 to match the live domain: point it somewhere unreachable and the email still
 sends, silently, with a text wordmark instead of the logo. `index.html` uses the

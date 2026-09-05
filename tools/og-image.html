@@ -1,0 +1,124 @@
+<!-- Source for assets/og-image.jpg (1200x630, the Open Graph share card).
+     To regenerate: open this file at exactly 1200x630 and screenshot it at
+     2x, then downsample to 1200x630 and save as JPEG q88. The 2x render is
+     what keeps the wordmark edges clean after JPEG. Paths are relative, so
+     open it from tools/. -->
+<style>
+  @font-face {
+    font-family: "Asah"; font-weight: 700; font-display: block;
+    src: url("../assets/fonts/asah-bold.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Asah"; font-weight: 500; font-display: block;
+    src: url("../assets/fonts/asah-medium.woff2") format("woff2");
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; }
+  body {
+    background: #23262B;
+    font-family: "Asah", sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .frame {
+    position: relative;
+    height: 100%;
+    padding: 76px 78px 0;
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    grid-template-rows: auto 1fr;
+    column-gap: 60px;
+  }
+
+  /* Same lockup as the site header: the wordmark supplies "asah" and the
+     tagline continues the sentence on its baseline. A replaced element with
+     baseline alignment puts its bottom margin edge on the text baseline, and
+     the SVG box hangs 9.211% of its width below the wordmark - hence the
+     negative margin rather than a guessed offset. */
+  .lock { grid-column: 1 / -1; grid-row: 1; display: block; margin-bottom: 58px; }
+  .lock img {
+    display: inline-block; vertical-align: baseline;
+    width: 296px;
+    margin-bottom: -27.26px;
+  }
+  .lock .tag {
+    font-weight: 500; font-size: 23px; line-height: 1.3;
+    color: rgba(255,255,255,.58);
+    letter-spacing: .01em;
+    margin-left: -3.9px;
+  }
+
+  .say { grid-column: 1; grid-row: 2; align-self: center; padding-bottom: 30px; }
+  h1 {
+    font-weight: 700;
+    font-size: 72px;
+    line-height: 1.06;
+    letter-spacing: -.035em;
+    color: #FFFFFF;
+    max-width: 600px;
+  }
+  .sub {
+    margin-top: 24px;
+    font-weight: 500;
+    font-size: 24px;
+    letter-spacing: .005em;
+    color: rgba(255,255,255,.58);
+  }
+
+  /* The right column carries the credential rather than ornament. A shared
+     link gets skimmed in a WhatsApp group; what earns the tap is "we can
+     claim this", not a decorative mark. */
+  .proof {
+    grid-column: 2; grid-row: 2;
+    align-self: center;
+    padding-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  /* The badge is navy artwork drawn for a white ground. Dropped straight onto
+     Graphite it goes muddy and the ring type disappears, so it keeps its disc. */
+  .badge {
+    width: 106px; height: 106px; border-radius: 50%;
+    background: #FFFFFF;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .badge img { display: block; width: 94px; height: 94px; }
+  .proof b {
+    font-weight: 700; font-size: 30px; line-height: 1.15;
+    letter-spacing: -.022em; color: #FFFFFF;
+  }
+  .proof .note {
+    font-weight: 500; font-size: 20px; line-height: 1.45;
+    color: rgba(255,255,255,.58);
+    margin-top: -8px;
+  }
+
+  /* The single Spark accent the brand guide allows per surface. */
+  .rule {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 8px;
+    background: #F0552E;
+  }
+</style>
+
+<div class="frame">
+  <span class="lock"
+    ><img src="../assets/asah-logo-on-dark.svg" alt=""
+    ><span class="tag">is Malay for sharpen.</span></span>
+
+  <div class="say">
+    <h1>Training you can<br>finally measure.</h1>
+    <p class="sub">The Thriving Talents Learning Platform</p>
+  </div>
+
+  <div class="proof">
+    <span class="badge"><img src="../assets/hrdc-claimable.png" alt=""></span>
+    <b>HRD&nbsp;Corp claimable</b>
+    <p class="note">Offset it against your levy.</p>
+  </div>
+</div>
+
+<div class="rule"></div>
