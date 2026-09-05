@@ -5,7 +5,7 @@ Asah is the Thriving Talents Learning Platform, powered by frntlne.
 Single static page behind the booth QR code. Plain HTML, CSS and vanilla JS. No build step.
 
 The page deliberately names no event. Every promise to the visitor is "we'll get in
-touch with you soon" — keep it that way unless the event is confirmed as a
+touch by the end of the week" — keep it that way unless the event is confirmed as a
 sponsor-level mention, since naming a conference on a public page is a claim about
 association with it.
 
@@ -120,9 +120,11 @@ For Mailchimp and Brevo the name is sent as `FNAME` / `FIRSTNAME` and the QR
 source as `QRSOURCE`; both merge fields have to exist on the list first.
 
 Two things this does not do, both of which matter once you email these people:
-there is no confirmation email (the page only promises to be in touch soon),
-and there is no unsubscribe link, so the footer's "unsubscribe any time"
-has to be honoured by hand or by moving the list into a proper email tool.
+there is no confirmation email, and there is no unsubscribe link, so the footer's "unsubscribe any time"
+has to be honoured by hand or by moving the list into a proper email tool. The page
+now promises contact **by the end of the week**, which is a commitment someone has to
+keep: either an autoresponder goes in before the QR codes are printed, or a named
+person works the sheet every Friday.
 
 ## Analytics events
 
