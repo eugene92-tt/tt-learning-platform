@@ -113,9 +113,42 @@ has actually been written to: a timestamp means sent, anything else means not.
 
 Settings live in the `CONFIRMATION` block at the top of the script —
 `SEND_CONFIRMATION` (set `false` to turn it off without removing anything),
-`FROM_NAME`, `REPLY_TO`, `SUBJECT`, and `confirmationText()` for the body
-itself. The body promises contact by the end of the week because the page does;
-change one and change the other.
+`HTML_EMAIL`, `FROM_NAME`, `REPLY_TO`, `SUBJECT`, `SITE_URL`, and
+`confirmationText()` / `confirmationHtml()` for the body. Both bodies promise
+contact by the end of the week because the page does; change one and change all
+three.
+
+Every message is multipart — the branded HTML plus the plain text as the
+fallback — so the text version is never a second-class copy. Set
+`HTML_EMAIL: false` to send text alone.
+
+**The HTML follows the Asah brand guide, and is deliberately thin.** A Graphite
+`#23262B` header carries the white-wordmark lockup (the guide's on-dark rule),
+with a single 3px Spark `#F0552E` rule beneath it. That rule is the *only* Spark
+in the message: the guide allows one accent per surface and forbids Spark body
+text, which on white reaches only 3.4:1. Body copy is Graphite, the footer is
+Stone `#5C6B78`. There is no button, because there is nothing to click — the
+call to action is "reply".
+
+Three constraints shaped it, and they are worth knowing before anyone asks for
+something richer:
+
+- **Webfonts do not load.** Gmail and Outlook strip `@font-face`, so Plus
+  Jakarta Sans is named first and a system stack does the actual work. Brand
+  typography is not available in email; the wordmark has to be an image.
+- **Remote images are blocked by default in Outlook.** The logo is therefore
+  *embedded* as an inline `cid:` attachment, fetched once from `SITE_URL` and
+  cached for six hours so no signup waits on a download. If the fetch fails the
+  email still sends, with the wordmark set as text.
+- **Dark modes recolour.** `color-scheme: light only` is declared so Gmail and
+  Outlook do not invert the Graphite header into a pale grey.
+
+The signup's name is HTML-escaped before it reaches the template. It is the one
+piece of attacker-controlled text in the message.
+
+`assets/asah-email-logo.png` is the header logo at 320px (displayed at 160), on
+transparent, generated from `assets/asah-logo-on-dark.svg`. It has to stay
+publicly reachable at `SITE_URL + LOGO_PATH` or the embed falls back to text.
 
 Four things about this are deliberate:
 
