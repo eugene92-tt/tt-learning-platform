@@ -56,7 +56,7 @@ function confirmationText(name) {
   return [
     name ? 'Hi ' + name + ',' : 'Hi,',
     'Thanks for registering your interest in Asah, the Thriving Talents Learning Platform. Your place in the first cohort is reserved.',
-    'Asah programmes are HRD Corp claimable. If you tell us your levy situation when we speak, we will point you at the scheme that fits.',
+    'The Asah learning reinforcement platform is HRD Corp claimable. If you are interested, we can point you at the scheme that fits when we speak.',
     'Someone from our team will be in touch by the end of this week to walk you through the platform and answer anything you want to ask before you commit to it.',
     'If you need us sooner, just reply to this email.',
     'Thriving Talents\n' + REPLY_TO,
@@ -110,7 +110,7 @@ function confirmationHtml(name, logoSrc) {
     // client previews "Hi Nurul," which wastes the only free impression.
     '<div style="display:none;max-height:0;max-width:0;opacity:0;overflow:hidden;' +
       'font-size:1px;line-height:1px;color:#E9EEF1;">',
-    'Your place in the first cohort is reserved, and Asah programmes are HRD Corp claimable.',
+    'Your place in the first cohort is reserved, and Asah is HRD Corp claimable.',
     '</div>',
 
     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" ' +
@@ -128,7 +128,7 @@ function confirmationHtml(name, logoSrc) {
       'line-height:1.6;color:#23262B;">',
     p(name ? 'Hi ' + escapeHtml(name) + ',' : 'Hi,'),
     p('Thanks for registering your interest in Asah, the Thriving Talents Learning Platform. Your place in the first cohort is reserved.'),
-    p('Asah programmes are <strong style="font-weight:700;">HRD Corp claimable</strong>. If you tell us your levy situation when we speak, we will point you at the scheme that fits.'),
+    p('The Asah learning reinforcement platform is <strong style="font-weight:700;">HRD Corp claimable</strong>. If you are interested, we can point you at the scheme that fits when we speak.'),
     p('Someone from our team will be in touch by the end of this week to walk you through the platform and answer anything you want to ask before you commit to it.'),
     p('If you need us sooner, just reply to this email.'),
     '<p style="margin:28px 0 0;">',
