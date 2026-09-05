@@ -35,32 +35,22 @@ const REPLY_TO  = 'sales@thrivingtalents.com';
 const SUBJECT   = 'Your Asah early access place';
 
 // The page promises contact by the end of the week, so this email has to
-// arrive first and say the same thing. Keep the two in step: if the page
-// copy changes, change this too.
+// arrive first and say the same thing. Keep the two in step: if the page copy
+// changes, change this too.
+//
+// Each paragraph is ONE line with no hard wrapping. Mail clients render
+// text/plain in a proportional font and wrap it to the reader's window, so
+// pre-wrapped lines come out as a ragged zigzag on a phone.
 function confirmationText(name) {
-  const hi = name ? 'Hi ' + name + ',' : 'Hi,';
   return [
-    hi,
-    '',
-    'Thanks for registering your interest in Asah, the Thriving Talents',
-    'Learning Platform. Your place in the first cohort is reserved.',
-    '',
-    'Someone from our team will be in touch by the end of this week to walk',
-    'you through the platform and answer anything you want to ask before you',
-    'commit to it.',
-    '',
-    'Asah programmes are HRD Corp claimable. If you tell us your levy',
-    'situation when we speak, we will point you at the scheme that fits.',
-    '',
+    name ? 'Hi ' + name + ',' : 'Hi,',
+    'Thanks for registering your interest in Asah, the Thriving Talents Learning Platform. Your place in the first cohort is reserved.',
+    'Someone from our team will be in touch by the end of this week to walk you through the platform and answer anything you want to ask before you commit to it.',
+    'Asah programmes are HRD Corp claimable. If you tell us your levy situation when we speak, we will point you at the scheme that fits.',
     'If you need us sooner, just reply to this email.',
-    '',
-    'Thriving Talents',
-    REPLY_TO,
-    '',
-    '--',
-    'You are receiving this because you registered on the Asah early access',
-    'page. Reply with "unsubscribe" and we will remove you.'
-  ].join('\n');
+    'Thriving Talents\n' + REPLY_TO,
+    '--\nYou are receiving this because you registered on the Asah early access page. Reply with "unsubscribe" and we will remove you.'
+  ].join('\n\n');
 }
 
 const SHEET_NAME = 'Signups';
