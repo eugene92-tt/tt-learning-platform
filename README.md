@@ -292,6 +292,15 @@ attached. There is no invite list and no seat cap: that tab *is* the attendee
 list. Someone RSVPing twice keeps one row, gets their newest details saved, and
 is not emailed again.
 
+**Checking where RSVPs go.** They land in the **Asah Interest List** sheet, on
+a **Future CHRO 2026** tab the script creates on the first RSVP. To confirm the
+live script is the RSVP version, open the `/exec` URL and look for
+`"handles":["early-access","FUTURE-CHRO-2026"]`. To test end to end, RSVP once
+at `/future-chro-2026?src=test` with your own address: the row should appear on
+that tab and the "See you on 13 November" email should arrive with a calendar
+invite. If the row lands on **Signups** instead and the email is the Asah
+early-access one, the old version is still deployed. Delete the test row after.
+
 **Closing RSVPs.** Set `futureChroRsvpOpen: false` in `config.js`. The form is
 replaced by a short "RSVPs are closed" note pointing to sales@.
 
