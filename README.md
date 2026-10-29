@@ -299,9 +299,10 @@ resolve to `/event.css` and 404.
 out of search results.
 
 **To swap in when they arrive:**
-- Speaker photos: replace `assets/future-chro-2026/{hishamudin,haikal,michael}.jpg`
-  (square, 640px or larger). The current files are cropped from the poster and
-  carry its KL skyline.
+- Speaker photos are the originals, cropped to 560px squares with the head at
+  54% of the frame and the eye line at 36% so the three read as one set. Their
+  white studio backgrounds are kept as they are. Datuk Hishamudin's source was
+  only 400px, so a larger original would sharpen his photo on retina screens.
 - UOA Academy logo: replace the typeset `.ev-logo-uoa` span in the header with
   an `<img>` (white version, SVG preferred).
 - Share card: `tools/og-future-chro-2026.html` -> `assets/future-chro-2026/og.jpg`,
