@@ -314,6 +314,16 @@ with Commercial Mindset?" is ungrammatical); "7-11 Malaysia" is written as
 7-Eleven Malaysia; the page does not promise "20 seats", because 20 is a target
 rather than a limit.
 
+**The "3 reasons" section is Eugene's copy**, word for word apart from casing:
+the headings arrived in capitals and are set in sentence case to match every
+other heading on the page. Each reason is labelled with the poster pillar it
+answers (Think beyond HR matters / Earn the trust of CEOs / Lead with commercial
+credibility), so page and poster say the same three things. The section sits
+between the hero and the speakers, so the page argues why, then who, then RSVP.
+Its closing line keeps the number but frames it as group size with a reason —
+"Kept to around 20 high-potential HR leaders, so every guest gets real time
+with Datuk Hishamudin Hasan…" — rather than as a cap on invitations.
+
 ## Content still to swap in
 
 - **Client logo wall.** Section 5 shows one unlabelled wall of logos from `assets/logos/`: Google, Coca-Cola, P&G, L'Oreal, Ryanair, Versace, Michael Kors, Rieckermann. These are frntlne's clients, and the wall does not say so — confirm with Datuk that TT is cleared to display them before the production deploy. To add or remove one, edit the single `<li>` in the `.logo-wall` list and drop the file into `assets/logos/`. Give it a size class by shape: `lw-sq` (square), `lw-m` (about 3:1), `lw-w` (about 5:1), `lw-xw` (8:1 or wider) — this keeps every logo at a similar optical weight.

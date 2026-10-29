@@ -32,6 +32,7 @@
 .ev-eyebrow,
 .ev-kicker,
 .ev-role,
+.ev-why-label,
 .ev-ticket-tag,
 .ev-motto {
   font-size: 12px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
@@ -104,7 +105,7 @@
 .ev-ticket-note { margin-top: 12px; font-size: 14px; color: var(--ev-ink-3); text-align: center; }
 
 /* ---------- Speakers ---------- */
-.ev-speakers { border-top: 1px solid var(--ev-line); }
+
 .ev-kicker { color: var(--ev-ink-3); margin-bottom: 28px; }
 .ev-person {
   display: grid; grid-template-columns: 96px 1fr; gap: 18px; align-items: center;
@@ -125,16 +126,34 @@
 .ev-person-lead .ev-bio { font-size: 17px; }
 .ev-cohost-grid { display: grid; gap: 24px; }
 
-/* ---------- Takeaways ---------- */
-.ev-take { background: var(--ev-surface); }
-.ev-take-list { display: grid; }
-.ev-take-list li { padding: 22px 0; border-top: 1px solid var(--ev-line); }
-.ev-take-list li:first-child { border-top: 0; padding-top: 0; }
-.ev-take-list h3 { font-size: 22px; font-weight: 700; line-height: 1.25; letter-spacing: -.01em; }
-.ev-take-list em { font-style: normal; color: var(--ev-gold); }
-.ev-take-list p { margin-top: 8px; color: var(--ev-ink-2); max-width: 32em; }
+/* ---------- Why attend ---------- */
+.ev-why { background: var(--ev-surface); }
+.ev-why-h {
+  font-size: clamp(26px, 6.4vw, 40px); font-weight: 700; line-height: 1.12;
+  letter-spacing: -.02em; text-wrap: balance; max-width: 24em;
+  margin-bottom: 36px;
+}
+.ev-why-list { list-style: none; margin: 0; padding: 0; }
+.ev-why-list li { display: grid; gap: 10px; padding: 26px 0; border-top: 1px solid var(--ev-line); }
+.ev-why-label { color: var(--ev-gold); }
+.ev-why-list h3 {
+  font-size: clamp(20px, 5vw, 25px); font-weight: 700; line-height: 1.25;
+  letter-spacing: -.012em; text-wrap: balance;
+}
+.ev-why-list h3 + p { margin-top: 10px; color: var(--ev-ink-2); max-width: 38em; }
+/* The bridge into the speakers: a short gold rule, then the line about Datuk. */
+.ev-why-close {
+  margin-top: 4px; padding-top: 22px;
+  font-size: clamp(18px, 4.6vw, 22px); line-height: 1.45; font-weight: 600;
+  color: var(--ev-ink); max-width: 36em;
+}
+.ev-why-close::before {
+  content: ""; display: block; width: 40px; height: 2px;
+  background: var(--ev-gold); margin-bottom: 18px;
+}
 
 /* ---------- RSVP ---------- */
+.ev-rsvp { border-top: 1px solid var(--ev-line); }
 .ev-rsvp-grid { display: grid; gap: 36px; }
 .ev-rsvp-h { font-size: clamp(28px, 7vw, 40px); font-weight: 700; line-height: 1.1; letter-spacing: -.02em; }
 .ev-details-lede { margin-top: 14px; color: var(--ev-ink-2); max-width: 30em; }
@@ -200,9 +219,10 @@
   .ev-person.ev-person-lead { grid-template-columns: 280px 1fr; gap: 40px; align-items: center; }
   .ev-person.ev-person-lead img { width: 280px; height: 280px; }
 
-  .ev-take-list { grid-template-columns: repeat(3, 1fr); }
-  .ev-take-list li { padding: 0 32px; border-top: 0; border-left: 1px solid var(--ev-line); }
-  .ev-take-list li:first-child { padding-left: 0; border-left: 0; }
+  .ev-why-h { margin-bottom: 44px; }
+  /* Label in its own column, aligned to the heading's first line. */
+  .ev-why-list li { grid-template-columns: 260px minmax(0, 1fr); gap: 40px; align-items: baseline; padding: 34px 0; }
+  .ev-why-close { margin-left: 300px; }
 
   .ev-rsvp-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 72px; align-items: start; }
 }
