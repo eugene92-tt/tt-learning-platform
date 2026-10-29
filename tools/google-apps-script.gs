@@ -168,6 +168,10 @@ function doPost(e) {
     const email = String(body.email || '').trim().toLowerCase();
     if (!EMAIL_RE.test(email)) return json({ ok: false, error: 'bad email' });
 
+    // Event RSVPs have their own tab and their own email. Nothing below this
+    // line runs for them, so the early-access flow is exactly as it was.
+    if (body.source === EVENT.campaign) return json(handleRsvp(body, email));
+
     const name = String(body.name || '').trim();
     let isNew = false;
     let row = 0;
@@ -370,4 +374,235 @@ function json(obj) {
   return ContentService
     .createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+/* ==========================================================================
+   Future CHRO 2026 — RSVPs
+   ==========================================================================
+   Invitations go out personally, so only people who are coming fill in the
+   form. Each RSVP lands on its own tab and gets one "see you there" email with
+   a calendar invite. There is no invite list and no seat cap: the tab is the
+   attendee list, and closing the form is a switch in config.js.
+*/
+const EVENT = {
+  campaign: 'FUTURE-CHRO-2026',
+  sheet: 'Future CHRO 2026',
+  title: 'Future CHROs with a Commercial Mindset',
+  // 9.30am–12.30pm MYT (UTC+8) on Friday 13 November 2026
+  startUtc: '20261113T013000Z',
+  endUtc: '20261113T043000Z',
+  when: 'Friday, 13 November 2026, 9.30am to 12.30pm (MYT)',
+  where: 'UOA Academy, Bangsar South, Kuala Lumpur',
+  url: 'https://asah.thrivingtalents.com/future-chro-2026',
+  subject: 'See you on 13 November: Future CHROs with a Commercial Mindset'
+};
+const RSVP_HEADERS = [
+  'Email', 'Name', 'Company', 'Job title', 'Mobile',
+  'First seen', 'Last seen', 'QR source', 'Submissions', 'Confirmation'
+];
+const RSVP_COL = { name: 2, company: 3, title: 4, mobile: 5, last: 7, count: 9, confirm: 10 };
+
+function clip_(v) { return String(v == null ? '' : v).trim().replace(/\s+/g, ' ').slice(0, 200); }
+
+function handleRsvp(body, email) {
+  const f = body.fields || {};
+  const name = clip_(body.name);
+  const company = clip_(f.company), title = clip_(f.title), mobile = clip_(f.mobile);
+  let isNew = false, row = 0;
+
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    const sheet = getRsvpSheet();
+    const now = new Date();
+    const found = findEmailRow(sheet, email);
+    if (found === -1) {
+      sheet.appendRow([email, name, company, title, mobile, now, now, clip_(body.qrSource), 1, '']);
+      row = sheet.getLastRow();
+      isNew = true;
+    } else {
+      // Same person again: keep one row, take the newest details they gave.
+      row = found;
+      if (name) sheet.getRange(row, RSVP_COL.name).setValue(name);
+      if (company) sheet.getRange(row, RSVP_COL.company).setValue(company);
+      if (title) sheet.getRange(row, RSVP_COL.title).setValue(title);
+      if (mobile) sheet.getRange(row, RSVP_COL.mobile).setValue(mobile);
+      sheet.getRange(row, RSVP_COL.last).setValue(now);
+      const n = sheet.getRange(row, RSVP_COL.count).getValue() || 1;
+      sheet.getRange(row, RSVP_COL.count).setValue(n + 1);
+    }
+  } finally {
+    lock.releaseLock();
+  }
+
+  // One email per person, however many times the form is sent.
+  if (isNew) sendRsvpConfirmation(email, name, row);
+  return { ok: true };
+}
+
+function getRsvpSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(EVENT.sheet);
+  if (!sheet) {
+    sheet = ss.insertSheet(EVENT.sheet);
+    sheet.appendRow(RSVP_HEADERS);
+    sheet.setFrozenRows(1);
+    sheet.getRange(1, 1, 1, RSVP_HEADERS.length).setFontWeight('bold');
+  }
+  return sheet;
+}
+
+function sendRsvpConfirmation(email, name, row) {
+  const sheet = getRsvpSheet();
+  const stamp = function (v) { sheet.getRange(row, RSVP_COL.confirm).setValue(v); };
+  if (!SEND_CONFIRMATION) return stamp('off');
+  try {
+    if (MailApp.getRemainingDailyQuota() < 1) return stamp('quota exhausted');
+    const opts = {
+      to: email,
+      subject: EVENT.subject,
+      body: rsvpText(name),
+      name: FROM_NAME,
+      replyTo: REPLY_TO,
+      attachments: [Utilities.newBlob(eventIcs(), 'text/calendar', 'future-chro-2026.ics')]
+    };
+    if (HTML_EMAIL) opts.htmlBody = rsvpHtml(name);
+    MailApp.sendEmail(opts);
+    stamp(new Date());
+  } catch (err) {
+    stamp('failed: ' + String(err).slice(0, 200));
+  }
+}
+
+/** Retries every RSVP whose Confirmation cell is not a date. Safe to run twice. */
+function resendMissingRsvpConfirmations() {
+  const sheet = getRsvpSheet();
+  const last = sheet.getLastRow();
+  if (last < 2) return;
+  const rows = sheet.getRange(2, 1, last - 1, RSVP_HEADERS.length).getValues();
+  let sent = 0;
+  for (let i = 0; i < rows.length; i++) {
+    if (rows[i][RSVP_COL.confirm - 1] instanceof Date) continue;
+    const to = String(rows[i][0]).trim();
+    if (!EMAIL_RE.test(to)) continue;
+    if (MailApp.getRemainingDailyQuota() < 1) break;
+    sendRsvpConfirmation(to, String(rows[i][RSVP_COL.name - 1]).trim(), i + 2);
+    sent++;
+  }
+  Logger.log('resendMissingRsvpConfirmations: sent ' + sent);
+}
+
+/** Sends the RSVP email to the script owner, for reading before invitations go out. */
+function previewRsvpConfirmation() {
+  const opts = {
+    to: Session.getEffectiveUser().getEmail(),
+    subject: '[preview] ' + EVENT.subject,
+    body: rsvpText('Eugene'),
+    name: FROM_NAME,
+    replyTo: REPLY_TO,
+    attachments: [Utilities.newBlob(eventIcs(), 'text/calendar', 'future-chro-2026.ics')]
+  };
+  if (HTML_EMAIL) opts.htmlBody = rsvpHtml('Eugene');
+  MailApp.sendEmail(opts);
+}
+
+function googleCalendarLink() {
+  return 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+    '&text=' + encodeURIComponent(EVENT.title) +
+    '&dates=' + EVENT.startUtc + '/' + EVENT.endUtc +
+    '&location=' + encodeURIComponent(EVENT.where) +
+    '&details=' + encodeURIComponent(EVENT.url);
+}
+
+// RFC 5545: CRLF line ends, and commas, semicolons and backslashes escaped in
+// text values. A stable UID means a second copy updates the same calendar
+// entry instead of adding another.
+function eventIcs() {
+  const esc = function (t) { return String(t).replace(/\\/g, '\\\\').replace(/([,;])/g, '\\$1').replace(/\n/g, '\\n'); };
+  const stamp = Utilities.formatDate(new Date(), 'UTC', "yyyyMMdd'T'HHmmss'Z'");
+  return [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Thriving Talents//Future CHRO 2026//EN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    'UID:future-chro-2026@thrivingtalents.com',
+    'DTSTAMP:' + stamp,
+    'DTSTART:' + EVENT.startUtc,
+    'DTEND:' + EVENT.endUtc,
+    'SUMMARY:' + esc(EVENT.title),
+    'LOCATION:' + esc(EVENT.where),
+    'DESCRIPTION:' + esc('Featuring Datuk Hishamudin Hasan. Co-hosted by Haikal (UOA Group) and Michael Teoh Su Lim (Thriving Talents).\n' + EVENT.url),
+    'URL:' + EVENT.url,
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].map(fold).join('\r\n') + '\r\n';
+}
+
+// Content lines longer than 75 octets must be folded: CRLF then a space.
+function fold(line) {
+  const out = [];
+  while (line.length > 75) { out.push(line.slice(0, 75)); line = ' ' + line.slice(75); }
+  out.push(line);
+  return out.join('\r\n');
+}
+
+function rsvpText(name) {
+  return [
+    name ? 'Hi ' + name + ',' : 'Hi,',
+    "Thank you for your RSVP. You're on the list for " + EVENT.title + '.',
+    'When: ' + EVENT.when + '\nWhere: ' + EVENT.where,
+    'Featuring Datuk Hishamudin Hasan, co-hosted by Haikal (UOA Group) and Michael Teoh Su Lim (Thriving Talents).',
+    'A calendar invite is attached. To add it to Google Calendar instead: ' + googleCalendarLink(),
+    'If your plans change, just reply to this email and let us know.',
+    'See you there,\nThriving Talents and UOA Academy\n' + REPLY_TO
+  ].join('\n\n');
+}
+
+// Typographic only: the event's black and gold, no images, so nothing breaks
+// when a mail client blocks pictures. Same table-and-inline-style rules as the
+// early-access email.
+function rsvpHtml(name) {
+  const gold = '#C8932E', ink = '#16181B', muted = '#5C6470';
+  const p = function (t, last) { return '<p style="margin:0 0 ' + (last ? '0' : '16px') + ';">' + t + '</p>'; };
+  const fact = function (k, v) {
+    return '<tr><td style="padding:6px 16px 6px 0;font-size:12px;font-weight:700;letter-spacing:.12em;' +
+      'text-transform:uppercase;color:' + muted + ';white-space:nowrap;vertical-align:top;">' + k + '</td>' +
+      '<td style="padding:6px 0;font-size:16px;color:' + ink + ';">' + v + '</td></tr>';
+  };
+  return [
+    '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">',
+    '<meta name="viewport" content="width=device-width,initial-scale=1">',
+    '<meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light only">',
+    '<title>' + escapeHtml(EVENT.subject) + '</title></head>',
+    '<body style="margin:0;padding:0;background:#EEEDEA;">',
+    '<div style="display:none;max-height:0;max-width:0;opacity:0;overflow:hidden;font-size:1px;line-height:1px;color:#EEEDEA;">',
+    "You're on the list. Friday 13 November, 9.30am at UOA Academy, Bangsar South.",
+    '</div>',
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#EEEDEA" style="background:#EEEDEA;border-collapse:collapse;">',
+    '<tr><td align="center" style="padding:24px 12px;">',
+    '<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background:#FFFFFF;border-collapse:collapse;">',
+    '<tr><td bgcolor="#0D0E10" style="background:#0D0E10;padding:28px 32px;font-family:' + FONT_STACK + ';">',
+    '<div style="font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#E9B44C;">By invitation &middot; 13 November 2026</div>',
+    '<div style="margin-top:10px;font-size:24px;line-height:1.2;font-weight:700;color:#FFFFFF;">' + escapeHtml(EVENT.title) + '</div>',
+    '</td></tr>',
+    '<tr><td bgcolor="#E9B44C" style="background:#E9B44C;font-size:0;line-height:0;height:3px;">&#8203;</td></tr>',
+    '<tr><td style="padding:32px;font-family:' + FONT_STACK + ';font-size:16px;line-height:1.6;color:' + ink + ';">',
+    p(name ? 'Hi ' + escapeHtml(name) + ',' : 'Hi,'),
+    p("Thank you for your RSVP. You&#8217;re on the list."),
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 20px;border-collapse:collapse;font-family:' + FONT_STACK + ';">',
+    fact('When', 'Friday, 13 November 2026<br>9.30am &ndash; 12.30pm (MYT)'),
+    fact('Where', escapeHtml(EVENT.where)),
+    '</table>',
+    p('Featuring <strong>Datuk Hishamudin Hasan</strong>, co-hosted by Haikal (UOA Group) and Michael Teoh Su Lim (Thriving Talents).'),
+    p('A calendar invite is attached. Using Google Calendar? <a href="' + googleCalendarLink() + '" style="color:' + ink + ';text-decoration:underline;">Add it there instead</a>.'),
+    p('If your plans change, just reply to this email and let us know.'),
+    '<p style="margin:28px 0 0;"><strong>Thriving Talents and UOA Academy</strong><br>',
+    '<a href="mailto:' + REPLY_TO + '" style="color:' + ink + ';text-decoration:underline;">' + REPLY_TO + '</a></p>',
+    '</td></tr>',
+    '<tr><td style="padding:18px 32px 26px;border-top:1px solid #EEEDEA;font-family:' + FONT_STACK + ';font-size:12px;line-height:1.55;color:' + muted + ';">',
+    'You are receiving this because you RSVPed at ' + EVENT.url.replace('https://', '') + '. We use your details only to run this session; they are shared with co-host UOA Academy.',
+    '</td></tr>',
+    '</table></td></tr></table></body></html>'
+  ].join('');
 }

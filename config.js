@@ -25,6 +25,10 @@ window.TT_CONFIG = {
   // Vercel Web Analytics (enable in the Vercel project first).
   vercelAnalytics: true,
 
+  // Future CHRO 2026 RSVP form (/future-chro-2026). Set to false to close
+  // RSVPs: the form is replaced by a short "RSVPs are closed" note.
+  futureChroRsvpOpen: true,
+
   // Overrides the frntlne co-brand logo in the header and footer.
   // The page ships with /assets/frntlne-logo-white.svg (reverse version, for the
   // navy background). /assets/frntlne-logo.svg is the original full-colour file,

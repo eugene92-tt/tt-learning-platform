@@ -73,8 +73,28 @@
 
   /* ---------- Email capture ---------- */
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-  var BUTTON_LABEL = 'Claim my place';
+  var PHONE_RE = /^\+?[\d\s().-]{8,20}$/;
+  // Per-form settings live on the form element, so the same script drives
+  // both the early-access page and event pages. Each falls back to the
+  // early-access value, which keeps that page's behaviour unchanged.
+  //   data-label      submit button text
+  //   data-campaign   tags the row; the Apps Script routes on it
+  //   data-email-msg  shown when the email is left empty
+  //   data-fail-msg   shown when the submit fails
+  //   data-open-key   config.js flag; false swaps the form for [data-closed]
+  // Inputs marked data-field are sent as extra fields; data-required makes
+  // them mandatory and data-kind="phone" checks the shape of a number.
+  function opt(form, attr, fallback) { return form.getAttribute(attr) || fallback; }
   var forms = [].slice.call(document.querySelectorAll('[data-capture-form]'));
+
+  forms = forms.filter(function (form) {
+    var key = form.getAttribute('data-open-key');
+    if (!key || cfg[key] !== false) return true;
+    form.hidden = true;
+    var closed = document.querySelector('[data-closed]');
+    if (closed) closed.hidden = false;
+    return false;
+  });
   var sticky = document.getElementById('sticky-cta');
 
   function panelFor(form) { return document.getElementById(form.getAttribute('data-thanks')); }
@@ -99,7 +119,7 @@
   function setBusy(form, busy) {
     var btn = form.querySelector('button[type="submit"]');
     btn.disabled = busy;
-    btn.textContent = busy ? 'Sending\u2026' : BUTTON_LABEL;
+    btn.textContent = busy ? 'Sending\u2026' : opt(form, 'data-label', 'Claim my place');
   }
 
   // Registering once covers the whole page, so every form flips to its
@@ -114,6 +134,10 @@
     var intro = document.querySelector('[data-closing-intro]');
     if (intro) intro.hidden = true;
     if (sticky) sticky.hidden = true;
+    var first = (submitted.querySelector('input[name="NAME"]').value || '').trim().split(/\s+/)[0];
+    document.querySelectorAll('[data-thanks-name]').forEach(function (el) {
+      el.textContent = first ? ', ' + first : '';
+    });
     var focusTarget = panelFor(submitted);
     if (focusTarget) focusTarget.focus();
     try { history.replaceState(null, '', '#thanks'); } catch (e) {}
@@ -158,13 +182,14 @@
   // Google Sheets via an Apps Script web app. A text/plain body keeps this a
   // "simple" request, so the browser skips the CORS preflight that Apps Script
   // cannot answer.
-  function submitSheet(name, email, location) {
+  function submitSheet(name, email, location, campaign, fields) {
     var payload = JSON.stringify({
       name: name,
       email: email,
-      source: 'ASAH',
+      source: campaign,
       qrSource: qrSource,
       location: location,
+      fields: fields,
       token: cfg.sheetsToken || ''
     });
     var opts = {
@@ -206,14 +231,27 @@
       var email = (input.value || '').trim();
       if (form.querySelector('input[name="hp"]').value) return; // bot
       if (name.length < 2) return showError(form, 'Enter your name so we know who to write to.', nameInput);
-      if (!email) return showError(form, 'Enter your work email to claim a place.', input);
+      if (!email) return showError(form, opt(form, 'data-email-msg', 'Enter your work email to claim a place.'), input);
       if (!EMAIL_RE.test(email)) return showError(form, 'That email doesn\'t look right. Check for typos and try again.', input);
+
+      var fields = {};
+      var extras = [].slice.call(form.querySelectorAll('[data-field]'));
+      for (var i = 0; i < extras.length; i++) {
+        var el = extras[i];
+        var v = (el.value || '').trim().replace(/\s+/g, ' ');
+        if (el.hasAttribute('data-required') && !v) return showError(form, el.getAttribute('data-required'), el);
+        if (v && el.getAttribute('data-kind') === 'phone' && !PHONE_RE.test(v)) {
+          return showError(form, 'That number doesn\'t look right. Include the area or mobile prefix, e.g. 012-345 6789.', el);
+        }
+        fields[el.name] = v;
+      }
       showError(form, '');
       setBusy(form, true);
 
       var where = form.getAttribute('data-location') || 'unknown';
+      var campaign = opt(form, 'data-campaign', 'ASAH');
       var send;
-      if (cfg.emailProvider === 'sheets' && cfg.sheetsEndpoint) send = submitSheet(name, email, where);
+      if (cfg.emailProvider === 'sheets' && cfg.sheetsEndpoint) send = submitSheet(name, email, where, campaign, fields);
       else if (cfg.emailProvider === 'mailchimp' && cfg.mailchimpAction) send = submitMailchimp(name, email);
       else if (cfg.emailProvider === 'brevo' && cfg.brevoAction) send = submitBrevo(name, email);
       else send = submitDemo();
@@ -222,12 +260,13 @@
         track('email_capture', {
           provider: cfg.emailProvider || 'none',
           location: where,
+          campaign: campaign,
           qr_source: qrSource || 'direct'
         });
         showThanks(form);
       }).catch(function (err) {
         setBusy(form, false);
-        showError(form, 'We couldn\'t save that just now. Please try again, or email sales@thrivingtalents.com and we\'ll sign you up.', input);
+        showError(form, opt(form, 'data-fail-msg', 'We couldn\'t save that just now. Please try again, or email sales@thrivingtalents.com and we\'ll sign you up.'), input);
         track('email_capture_error', { message: String(err && err.message || err) });
       });
     });

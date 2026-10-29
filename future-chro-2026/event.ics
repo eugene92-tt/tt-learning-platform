@@ -1,0 +1,17 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Thriving Talents//Future CHRO 2026//EN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:future-chro-2026@thrivingtalents.com
+DTSTAMP:20261029T120000Z
+DTSTART:20261113T013000Z
+DTEND:20261113T043000Z
+SUMMARY:Future CHROs with a Commercial Mindset
+LOCATION:UOA Academy\, Bangsar South\, Kuala Lumpur
+DESCRIPTION:Featuring Datuk Hishamudin Hasan. Co-hosted by Haikal (UOA Grou
+ p) and Michael Teoh Su Lim (Thriving Talents).\nhttps://asah.thrivingtalen
+ ts.com/future-chro-2026
+URL:https://asah.thrivingtalents.com/future-chro-2026
+END:VEVENT
+END:VCALENDAR

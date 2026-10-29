@@ -1,0 +1,208 @@
+/* ==========================================================================
+   Future CHRO 2026 — event page. Loads after /styles.css and reuses its
+   fonts, resets, .wrap, .btn, .capture-field, .hp, .sr-only and .thanks.
+
+   The look follows the poster's black and gold, without its lens flares,
+   glow and glossy type: one gold accent on a near-black ground. Everything
+   here is prefixed ev- so none of it can reach the main page's .hero/.brand.
+   ========================================================================== */
+
+.ev {
+  --ev-ground: #0D0E10;
+  --ev-surface: #15171A;
+  --ev-line: rgba(255, 255, 255, .10);
+  --ev-ink: #FFFFFF;
+  --ev-ink-2: rgba(255, 255, 255, .76);
+  --ev-ink-3: rgba(255, 255, 255, .56);
+  --ev-gold: #E9B44C;       /* 10.6:1 on the ground; safe for text and as a fill */
+  --ev-gold-600: #D49E33;
+  --ev-gold-line: rgba(233, 180, 76, .38);
+
+  background: var(--ev-ground);
+  color: var(--ev-ink);
+}
+.ev section { padding: 64px 0; }
+/* The form and panels are laid out with display: grid, which outranks the
+   browser's own [hidden] rule — without this the form stays on screen after
+   it is submitted or closed. */
+.ev [hidden] { display: none !important; }
+.ev .skip { background: var(--ev-gold); color: var(--ev-ground); }
+
+/* Spaced capitals, the poster's own label voice. */
+.ev-eyebrow,
+.ev-kicker,
+.ev-role,
+.ev-ticket-tag,
+.ev-motto {
+  font-size: 12px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+}
+
+/* ---------- Gold button ---------- */
+.btn-gold { background: var(--ev-gold); color: var(--ev-ground); }
+.btn-gold:hover { background: var(--ev-gold-600); }
+.btn-gold[disabled] { opacity: .7; cursor: progress; }
+.btn-gold-line { background: transparent; color: var(--ev-ink); border-color: var(--ev-gold-line); }
+.btn-gold-line:hover { border-color: var(--ev-gold); }
+.ev .btn:focus-visible { outline-color: var(--ev-gold); }
+
+/* ---------- Co-host bar ---------- */
+.ev-top { padding: 22px 0 0; }
+.ev-cohosts {
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: 14px 0;
+}
+.ev-cohosts > * { padding: 0 16px; border-left: 1px solid var(--ev-line); }
+.ev-cohosts > :first-child { padding-left: 0; border-left: 0; }
+.ev-logo-tt { width: 104px; }
+/* The Asah SVG carries its clearspace inside the box, so it is set larger
+   than the visible wordmark needs and pulled in on the left. */
+.ev-logo-asah { width: 92px; margin: -8px 0 -8px -10px; }
+.ev-cohosts > .ev-logo-asah { padding: 0 6px; }
+.ev-logo-uoa { display: inline-flex; flex-direction: column; line-height: 1; }
+.ev-logo-uoa b { font-size: 21px; font-weight: 700; letter-spacing: .02em; }
+.ev-logo-uoa span { font-size: 8.5px; font-weight: 700; letter-spacing: .32em; text-transform: uppercase; margin-top: 3px; }
+
+/* ---------- Hero ---------- */
+.ev-hero { padding-top: 44px; }
+.ev-hero-grid { display: grid; gap: 36px; }
+.ev-eyebrow {
+  color: var(--ev-gold);
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px;
+}
+.ev-eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--ev-gold); flex: none; }
+.ev h1 {
+  font-size: clamp(36px, 9.6vw, 62px);
+  line-height: 1.04; font-weight: 700; letter-spacing: -.03em;
+  text-wrap: balance;
+}
+.ev h1 em { font-style: normal; color: var(--ev-gold); }
+.ev-lede {
+  margin-top: 22px; max-width: 34em;
+  font-size: 18px; line-height: 1.55; color: var(--ev-ink-2);
+}
+
+/* The details card reads like the invitation itself. */
+.ev-ticket {
+  align-self: start;
+  background: var(--ev-surface);
+  border: 1px solid var(--ev-gold-line);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.ev-ticket-tag { color: var(--ev-gold); margin-bottom: 16px; }
+.ev-facts { display: grid; gap: 14px; margin-bottom: 22px; }
+.ev-facts li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; }
+.ev-facts svg {
+  width: 22px; height: 22px; margin-top: 1px;
+  fill: none; stroke: var(--ev-gold); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+}
+.ev-facts b { font-weight: 700; font-size: 17px; }
+.ev-facts small { display: block; font-size: 15px; color: var(--ev-ink-3); }
+.ev-facts li:nth-child(2) small { display: inline; margin-left: 4px; }
+.ev-ticket-btn { width: 100%; }
+.ev-ticket-note { margin-top: 12px; font-size: 14px; color: var(--ev-ink-3); text-align: center; }
+
+/* ---------- Speakers ---------- */
+.ev-speakers { border-top: 1px solid var(--ev-line); }
+.ev-kicker { color: var(--ev-ink-3); margin-bottom: 28px; }
+.ev-person {
+  display: grid; grid-template-columns: 96px 1fr; gap: 18px; align-items: center;
+}
+.ev-person img { width: 96px; height: 96px; border-radius: var(--radius-sm); object-fit: cover; }
+.ev-role { color: var(--ev-gold); margin-bottom: 6px; font-size: 11px; }
+.ev-person h3 { font-size: 20px; font-weight: 700; line-height: 1.2; letter-spacing: -.01em; }
+.ev-bio { margin-top: 6px; font-size: 15px; line-height: 1.5; color: var(--ev-ink-2); }
+
+/* Two classes, so the plain .ev-person column rules never override it. */
+.ev-person.ev-person-lead {
+  grid-template-columns: 1fr;
+  padding-bottom: 32px; margin-bottom: 32px;
+  border-bottom: 1px solid var(--ev-line);
+}
+.ev-person-lead img { width: 100%; max-width: 280px; height: auto; aspect-ratio: 1; }
+.ev-person-lead h3 { font-size: clamp(26px, 6.4vw, 34px); }
+.ev-person-lead .ev-bio { font-size: 17px; }
+.ev-cohost-grid { display: grid; gap: 24px; }
+
+/* ---------- Takeaways ---------- */
+.ev-take { background: var(--ev-surface); }
+.ev-take-list { display: grid; }
+.ev-take-list li { padding: 22px 0; border-top: 1px solid var(--ev-line); }
+.ev-take-list li:first-child { border-top: 0; padding-top: 0; }
+.ev-take-list h3 { font-size: 22px; font-weight: 700; line-height: 1.25; letter-spacing: -.01em; }
+.ev-take-list em { font-style: normal; color: var(--ev-gold); }
+.ev-take-list p { margin-top: 8px; color: var(--ev-ink-2); max-width: 32em; }
+
+/* ---------- RSVP ---------- */
+.ev-rsvp-grid { display: grid; gap: 36px; }
+.ev-rsvp-h { font-size: clamp(28px, 7vw, 40px); font-weight: 700; line-height: 1.1; letter-spacing: -.02em; }
+.ev-details-lede { margin-top: 14px; color: var(--ev-ink-2); max-width: 30em; }
+.ev-dl { margin: 26px 0 0; display: grid; gap: 16px; }
+.ev-dl > div { display: grid; gap: 2px; padding-top: 16px; border-top: 1px solid var(--ev-line); }
+.ev-dl dt { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--ev-gold); }
+.ev-dl dd { margin: 0; color: var(--ev-ink); }
+.ev-dl a { color: var(--ev-ink-2); text-underline-offset: 3px; }
+.ev-dl a:hover { color: var(--ev-ink); }
+
+.ev-form-col { min-width: 0; }
+.ev-form { max-width: none; display: grid; gap: 16px; }
+.ev-field { display: grid; gap: 7px; min-width: 0; }
+.ev-field label { font-size: 15px; font-weight: 600; }
+.ev-field label span { font-weight: 500; color: var(--ev-ink-3); margin-left: 4px; }
+.ev-field-pair { display: grid; gap: 16px; }
+.ev .capture-field { border-color: rgba(255,255,255,.16); background: rgba(255,255,255,.05); }
+.ev .capture input:focus { border-color: var(--ev-gold); background: rgba(255,255,255,.08); }
+.ev .capture input::placeholder { color: rgba(255,255,255,.34); }
+.ev-form .btn { width: 100%; margin-top: 6px; }
+.ev-form .error { margin-top: 0; }
+.ev-consent { font-size: 13px; line-height: 1.5; color: var(--ev-ink-3); }
+
+.ev-thanks { max-width: none; background: var(--ev-surface); border-color: var(--ev-gold-line); }
+.ev-thanks .thanks-icon { background: var(--ev-gold); color: var(--ev-ground); }
+.ev-thanks a { color: var(--ev-ink); }
+.ev-cal { display: grid; gap: 10px; margin-top: 20px; }
+
+/* ---------- Footer ---------- */
+.ev-foot {
+  border-top: 1px solid var(--ev-line);
+  padding: 36px 0 48px;
+  font-size: 14px; color: var(--ev-ink-3);
+}
+.ev-foot p + p { margin-top: 8px; }
+.ev-foot a { color: var(--ev-ink-2); text-underline-offset: 3px; }
+.ev-motto { color: var(--ev-gold); margin-bottom: 16px; font-size: 11px; letter-spacing: .24em; }
+.ev-motto span { white-space: nowrap; }
+.ev-motto i { font-style: normal; color: var(--ev-ink-3); margin: 0 .3em; }
+.ev-legal { font-size: 13px; }
+
+/* ---------- Wider screens ---------- */
+@media (min-width: 560px) {
+  .ev-field-pair { grid-template-columns: 1fr 1fr; }
+  .ev-cal { grid-template-columns: 1fr 1fr; }
+}
+
+@media (min-width: 800px) {
+  .ev section { padding: 88px 0; }
+  .ev-top { padding-top: 30px; }
+  .ev-logo-tt { width: 124px; }
+  .ev-logo-asah { width: 108px; }
+  .ev-logo-uoa b { font-size: 25px; }
+  .ev-logo-uoa span { font-size: 10px; }
+
+  .ev-hero { padding-top: 64px; }
+  .ev-hero-grid { grid-template-columns: minmax(0, 1fr) 340px; gap: 56px; align-items: end; }
+  .ev-ticket { padding: 28px; }
+
+  .ev-cohost-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .ev-person { grid-template-columns: 120px 1fr; gap: 22px; }
+  .ev-person img { width: 120px; height: 120px; }
+  .ev-person.ev-person-lead { grid-template-columns: 280px 1fr; gap: 40px; align-items: center; }
+  .ev-person.ev-person-lead img { width: 280px; height: 280px; }
+
+  .ev-take-list { grid-template-columns: repeat(3, 1fr); }
+  .ev-take-list li { padding: 0 32px; border-top: 0; border-left: 1px solid var(--ev-line); }
+  .ev-take-list li:first-child { padding-left: 0; border-left: 0; }
+
+  .ev-rsvp-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 72px; align-items: start; }
+}

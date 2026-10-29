@@ -264,6 +264,55 @@ this."** This is a claim about TT's HRD Corp registration, so keep the wording a
 Corp approves it — "claimable" describes the programme, not a guarantee that any
 particular levy claim will be approved.
 
+## Future CHRO 2026 event page
+
+`/future-chro-2026` is the RSVP page for the invitation-only session on
+Friday 13 November 2026, 9.30am to 12.30pm MYT, at UOA Academy, Bangsar South.
+Its files are `future-chro-2026/index.html`, `future-chro-2026/event.css`,
+`future-chro-2026/event.ics` and `assets/future-chro-2026/`. It shares
+`/styles.css`, `/script.js` and `/config.js` with the main page.
+
+**How RSVPs work.** Michael invites people personally; only those who are coming
+fill in the form. Each RSVP lands on its own **Future CHRO 2026** tab (Email,
+Name, Company, Job title, Mobile, First seen, Last seen, QR source, Submissions,
+Confirmation) and gets one "see you there" email with a calendar invite
+attached. There is no invite list and no seat cap: that tab *is* the attendee
+list. Someone RSVPing twice keeps one row, gets their newest details saved, and
+is not emailed again.
+
+**Closing RSVPs.** Set `futureChroRsvpOpen: false` in `config.js`. The form is
+replaced by a short "RSVPs are closed" note pointing to sales@.
+
+**The Apps Script.** RSVPs are routed by `source: 'FUTURE-CHRO-2026'` at the top
+of `doPost`; everything else takes the early-access path exactly as before.
+After pasting the updated script, use **Deploy -> Manage deployments -> edit
+(pencil) -> Version: New version**. Do not choose "New deployment": it issues a
+new `/exec` URL and the live main page would keep posting to the old one. Run
+`previewRsvpConfirmation()` once to read the email in your own inbox, and
+`resendMissingRsvpConfirmations()` after any quota or mail failure.
+
+**Every path on the page is absolute.** With `cleanUrls` and no trailing slash
+the page is served at `/future-chro-2026`, so a relative `event.css` would
+resolve to `/event.css` and 404.
+
+**The page is `noindex`.** It is invitation-only, so it shares by link but stays
+out of search results.
+
+**To swap in when they arrive:**
+- Speaker photos: replace `assets/future-chro-2026/{hishamudin,haikal,michael}.jpg`
+  (square, 640px or larger). The current files are cropped from the poster and
+  carry its KL skyline.
+- UOA Academy logo: replace the typeset `.ev-logo-uoa` span in the header with
+  an `<img>` (white version, SVG preferred).
+- Share card: `tools/og-future-chro-2026.html` -> `assets/future-chro-2026/og.jpg`,
+  regenerated the same way as the main card.
+
+**Wording deliberately different from the poster:** the headline is "Are you a
+future CHRO with a commercial mindset?" (the poster's "Are you future CHROs
+with Commercial Mindset?" is ungrammatical); "7-11 Malaysia" is written as
+7-Eleven Malaysia; the page does not promise "20 seats", because 20 is a target
+rather than a limit.
+
 ## Content still to swap in
 
 - **Client logo wall.** Section 5 shows one unlabelled wall of logos from `assets/logos/`: Google, Coca-Cola, P&G, L'Oreal, Ryanair, Versace, Michael Kors, Rieckermann. These are frntlne's clients, and the wall does not say so — confirm with Datuk that TT is cleared to display them before the production deploy. To add or remove one, edit the single `<li>` in the `.logo-wall` list and drop the file into `assets/logos/`. Give it a size class by shape: `lw-sq` (square), `lw-m` (about 3:1), `lw-w` (about 5:1), `lw-xw` (8:1 or wider) — this keeps every logo at a similar optical weight.
