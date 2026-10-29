@@ -100,6 +100,18 @@ the quickest way to confirm the deployment is live.
 After editing the script, **Deploy -> Manage deployments -> edit -> Version:
 New version**, or the live URL keeps serving the old code.
 
+The sheet is **Asah Interest List** in Eugene's Drive. **Columns are found by
+their header text**, so the team can add, remove or reorder columns by hand
+(LinkedIn, Position, notes) and the script still writes to the right ones; only
+rename the script's own headers if you rename them in `HEADERS` / `RSVP_HEADERS`
+too. A required header that goes missing is added back at the right-hand end.
+(Until this change the script wrote by column number, so the hand-added
+LinkedIn/Position/Industry columns pushed its writes into the wrong cells.)
+
+**Checking which version is live:** open the `/exec` URL from `config.js` in a
+browser. `"handles": ["early-access", "FUTURE-CHRO-2026"]` means the current
+script is deployed; no `handles` means an older version is still live.
+
 The sheet keeps one row per address: a repeat signup bumps *Last seen* and
 *Submissions* rather than adding a duplicate. Columns are Email, Name, First
 seen, Last seen, Campaign, QR source, Form, Submissions and Confirmation.

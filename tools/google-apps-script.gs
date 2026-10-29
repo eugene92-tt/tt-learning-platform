@@ -154,7 +154,6 @@ const HEADERS = [
   'Email', 'Name', 'First seen', 'Last seen',
   'Campaign', 'QR source', 'Form', 'Submissions', 'Confirmation'
 ];
-const COL_EMAIL = 1, COL_NAME = 2, COL_LAST = 4, COL_COUNT = 8, COL_CONFIRM = 9;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 function doPost(e) {
@@ -182,26 +181,27 @@ function doPost(e) {
     lock.waitLock(20000);
     try {
       const sheet = getSheet();
+      const c = columnsFor(sheet, HEADERS);
       const now = new Date();
-      const rowIndex = findEmailRow(sheet, email);
+      const rowIndex = findEmailRow(sheet, email, c.col['Email']);
 
       if (rowIndex === -1) {
-        sheet.appendRow([
-          email, name, now, now,
-          body.source || '', body.qrSource || '', body.location || '', 1, ''
-        ]);
+        sheet.appendRow(rowFor(sheet, c, {
+          'Email': email, 'Name': name, 'First seen': now, 'Last seen': now,
+          'Campaign': body.source || '', 'QR source': body.qrSource || '',
+          'Form': body.location || '', 'Submissions': 1
+        }));
         row = sheet.getLastRow();
         isNew = true;
       } else {
         // Already registered. Keep one row per person rather than adding a
         // duplicate — this also absorbs the client's retry after a blocked read.
         row = rowIndex;
-        sheet.getRange(row, COL_LAST).setValue(now);
-        if (name && !String(sheet.getRange(row, COL_NAME).getValue()).trim()) {
-          sheet.getRange(row, COL_NAME).setValue(name);
+        sheet.getRange(row, c.col['Last seen']).setValue(now);
+        if (name && !String(sheet.getRange(row, c.col['Name']).getValue()).trim()) {
+          sheet.getRange(row, c.col['Name']).setValue(name);
         }
-        const count = sheet.getRange(row, COL_COUNT).getValue() || 1;
-        sheet.getRange(row, COL_COUNT).setValue(count + 1);
+        bump(sheet, row, c.col['Submissions']);
       }
     } finally {
       lock.releaseLock();
@@ -225,6 +225,8 @@ function doGet() {
   return json({
     ok: true,
     service: 'tt-asah-signups',
+    // Opening the /exec URL shows whether the RSVP code is the version live.
+    handles: ['early-access', EVENT.campaign],
     mailQuotaRemaining: SEND_CONFIRMATION ? MailApp.getRemainingDailyQuota() : null
   });
 }
@@ -236,15 +238,16 @@ function doGet() {
  */
 function sendConfirmation(email, name, row) {
   const sheet = getSheet();
+  const confirmCol = columnsFor(sheet, HEADERS).col['Confirmation'];
   if (!SEND_CONFIRMATION) {
-    sheet.getRange(row, COL_CONFIRM).setValue('off');
+    sheet.getRange(row, confirmCol).setValue('off');
     return;
   }
   try {
     // Better to leave the row marked "quota" and send it by hand than to
     // throw away the signup for the rest of the day.
     if (MailApp.getRemainingDailyQuota() < 1) {
-      sheet.getRange(row, COL_CONFIRM).setValue('quota exhausted');
+      sheet.getRange(row, confirmCol).setValue('quota exhausted');
       return;
     }
     const opts = {
@@ -267,9 +270,9 @@ function sendConfirmation(email, name, row) {
       }
     }
     MailApp.sendEmail(opts);
-    sheet.getRange(row, COL_CONFIRM).setValue(new Date());
+    sheet.getRange(row, confirmCol).setValue(new Date());
   } catch (err) {
-    sheet.getRange(row, COL_CONFIRM).setValue('failed: ' + String(err).slice(0, 200));
+    sheet.getRange(row, confirmCol).setValue('failed: ' + String(err).slice(0, 200));
   }
 }
 
@@ -281,15 +284,18 @@ function sendConfirmation(email, name, row) {
  */
 function resendMissingConfirmations() {
   const sheet = getSheet();
+  const c = columnsFor(sheet, HEADERS);
   const last = sheet.getLastRow();
   if (last < 2) return;
-  const rows = sheet.getRange(2, 1, last - 1, HEADERS.length).getValues();
+  const rows = sheet.getRange(2, 1, last - 1, c.width).getValues();
+  const at = function (r, h) { return r[c.col[h] - 1]; };
   let sent = 0;
   for (let i = 0; i < rows.length; i++) {
-    if (rows[i][COL_CONFIRM - 1] instanceof Date) continue;
-    if (!EMAIL_RE.test(String(rows[i][COL_EMAIL - 1]).trim())) continue;
+    if (at(rows[i], 'Confirmation') instanceof Date) continue;
+    const to = String(at(rows[i], 'Email')).trim();
+    if (!EMAIL_RE.test(to)) continue;
     if (MailApp.getRemainingDailyQuota() < 1) break;
-    sendConfirmation(String(rows[i][COL_EMAIL - 1]).trim(), String(rows[i][COL_NAME - 1]).trim(), i + 2);
+    sendConfirmation(to, String(at(rows[i], 'Name')).trim(), i + 2);
     sent++;
   }
   Logger.log('resendMissingConfirmations: sent ' + sent);
@@ -350,24 +356,57 @@ function getSheet() {
     sheet.appendRow(HEADERS);
     sheet.setFrozenRows(1);
     sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold');
-    return sheet;
-  }
-  // A sheet created before the confirmation column existed is one column
-  // short; widen it in place rather than making anyone rebuild the sheet.
-  if (sheet.getLastColumn() < HEADERS.length) {
-    sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]).setFontWeight('bold');
   }
   return sheet;
 }
 
-function findEmailRow(sheet, email) {
+function findEmailRow(sheet, email, col) {
   const last = sheet.getLastRow();
   if (last < 2) return -1;
-  const values = sheet.getRange(2, 1, last - 1, 1).getValues();
+  const values = sheet.getRange(2, col || 1, last - 1, 1).getValues();
   for (let i = 0; i < values.length; i++) {
     if (String(values[i][0]).trim().toLowerCase() === email) return i + 2;
   }
   return -1;
+}
+
+/**
+ * Finds every column by its header text, so the team can add, remove or
+ * reorder columns by hand (LinkedIn, Position, notes...) without the script
+ * writing into the wrong ones. A required header that has gone missing is
+ * added at the right-hand end; nothing is ever inserted or moved.
+ */
+function columnsFor(sheet, required) {
+  const width = Math.max(sheet.getLastColumn(), 1);
+  const row1 = sheet.getRange(1, 1, 1, width).getValues()[0];
+  const col = {};
+  row1.forEach(function (h, i) {
+    const key = String(h).trim();
+    if (key && !(key in col)) col[key] = i + 1;
+  });
+  let end = width;
+  required.forEach(function (h) {
+    if (!col[h]) {
+      end += 1;
+      sheet.getRange(1, end).setValue(h).setFontWeight('bold');
+      col[h] = end;
+    }
+  });
+  return { col: col, width: end };
+}
+
+/** A new row as wide as the sheet, each value under its own header. */
+function rowFor(sheet, c, values) {
+  const row = [];
+  for (let i = 0; i < Math.max(c.width, sheet.getLastColumn()); i++) row.push('');
+  Object.keys(values).forEach(function (h) { row[c.col[h] - 1] = values[h]; });
+  return row;
+}
+
+/** Adds one to a counter cell. Number() so a stray word can never become "HRLC1". */
+function bump(sheet, row, column) {
+  const cell = sheet.getRange(row, column);
+  cell.setValue((Number(cell.getValue()) || 1) + 1);
 }
 
 function json(obj) {
@@ -400,7 +439,6 @@ const RSVP_HEADERS = [
   'Email', 'Name', 'Company', 'Job title', 'Mobile',
   'First seen', 'Last seen', 'QR source', 'Submissions', 'Confirmation'
 ];
-const RSVP_COL = { name: 2, company: 3, title: 4, mobile: 5, last: 7, count: 9, confirm: 10 };
 
 function clip_(v) { return String(v == null ? '' : v).trim().replace(/\s+/g, ' ').slice(0, 200); }
 
@@ -414,22 +452,23 @@ function handleRsvp(body, email) {
   lock.waitLock(20000);
   try {
     const sheet = getRsvpSheet();
+    const c = columnsFor(sheet, RSVP_HEADERS);
     const now = new Date();
-    const found = findEmailRow(sheet, email);
+    const found = findEmailRow(sheet, email, c.col['Email']);
     if (found === -1) {
-      sheet.appendRow([email, name, company, title, mobile, now, now, clip_(body.qrSource), 1, '']);
+      sheet.appendRow(rowFor(sheet, c, {
+        'Email': email, 'Name': name, 'Company': company, 'Job title': title, 'Mobile': mobile,
+        'First seen': now, 'Last seen': now, 'QR source': clip_(body.qrSource), 'Submissions': 1
+      }));
       row = sheet.getLastRow();
       isNew = true;
     } else {
       // Same person again: keep one row, take the newest details they gave.
       row = found;
-      if (name) sheet.getRange(row, RSVP_COL.name).setValue(name);
-      if (company) sheet.getRange(row, RSVP_COL.company).setValue(company);
-      if (title) sheet.getRange(row, RSVP_COL.title).setValue(title);
-      if (mobile) sheet.getRange(row, RSVP_COL.mobile).setValue(mobile);
-      sheet.getRange(row, RSVP_COL.last).setValue(now);
-      const n = sheet.getRange(row, RSVP_COL.count).getValue() || 1;
-      sheet.getRange(row, RSVP_COL.count).setValue(n + 1);
+      const set = function (h, v) { if (v) sheet.getRange(row, c.col[h]).setValue(v); };
+      set('Name', name); set('Company', company); set('Job title', title); set('Mobile', mobile);
+      sheet.getRange(row, c.col['Last seen']).setValue(now);
+      bump(sheet, row, c.col['Submissions']);
     }
   } finally {
     lock.releaseLock();
@@ -454,7 +493,8 @@ function getRsvpSheet() {
 
 function sendRsvpConfirmation(email, name, row) {
   const sheet = getRsvpSheet();
-  const stamp = function (v) { sheet.getRange(row, RSVP_COL.confirm).setValue(v); };
+  const confirmCol = columnsFor(sheet, RSVP_HEADERS).col['Confirmation'];
+  const stamp = function (v) { sheet.getRange(row, confirmCol).setValue(v); };
   if (!SEND_CONFIRMATION) return stamp('off');
   try {
     if (MailApp.getRemainingDailyQuota() < 1) return stamp('quota exhausted');
@@ -477,16 +517,18 @@ function sendRsvpConfirmation(email, name, row) {
 /** Retries every RSVP whose Confirmation cell is not a date. Safe to run twice. */
 function resendMissingRsvpConfirmations() {
   const sheet = getRsvpSheet();
+  const c = columnsFor(sheet, RSVP_HEADERS);
   const last = sheet.getLastRow();
   if (last < 2) return;
-  const rows = sheet.getRange(2, 1, last - 1, RSVP_HEADERS.length).getValues();
+  const rows = sheet.getRange(2, 1, last - 1, c.width).getValues();
+  const at = function (r, h) { return r[c.col[h] - 1]; };
   let sent = 0;
   for (let i = 0; i < rows.length; i++) {
-    if (rows[i][RSVP_COL.confirm - 1] instanceof Date) continue;
-    const to = String(rows[i][0]).trim();
+    if (at(rows[i], 'Confirmation') instanceof Date) continue;
+    const to = String(at(rows[i], 'Email')).trim();
     if (!EMAIL_RE.test(to)) continue;
     if (MailApp.getRemainingDailyQuota() < 1) break;
-    sendRsvpConfirmation(to, String(rows[i][RSVP_COL.name - 1]).trim(), i + 2);
+    sendRsvpConfirmation(to, String(at(rows[i], 'Name')).trim(), i + 2);
     sent++;
   }
   Logger.log('resendMissingRsvpConfirmations: sent ' + sent);
