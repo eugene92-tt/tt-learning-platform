@@ -459,7 +459,7 @@ const EVENTS = {
     url: 'https://asah.thrivingtalents.com/executive-evening-2026',
     subject: 'See you on 16 November: Executive Cocktail Evening',
     preheader: "You're on the list. Monday 16 November, 6pm at Sofitel Kuala Lumpur Damansara.",
-    lineup: 'With Datuk Hishamudin Hasan and Michael Solomon (Solly), CEO of frntlne. Cocktails and mocktails, networking, and a live preview of Asah.',
+    lineup: 'With Datuk Hishamudin Hasan and Michael Solomon, CEO of frntlne. Cocktails and mocktails, networking, and a live preview of Asah.',
     signoff: 'Thriving Talents',
     privacy: 'We use your details only to run this evening.',
     ground: '#07111F',

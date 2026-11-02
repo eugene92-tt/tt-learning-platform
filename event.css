@@ -137,7 +137,6 @@
 .ev-person.ev-person-duo { grid-template-columns: 1fr; align-items: start; gap: 20px; }
 .ev-person.ev-person-duo img { width: 100%; max-width: 240px; height: auto; aspect-ratio: 1; }
 .ev-person-duo h3 { font-size: clamp(22px, 5.6vw, 26px); }
-.ev-aka { font-weight: 500; color: var(--ev-ink-3); }
 .ev-role-line { margin-top: 6px; font-weight: 600; color: var(--ev-accent); }
 .ev-fact-plain { color: var(--ev-ink-2) !important; }
 .ev-nb { white-space: nowrap; }

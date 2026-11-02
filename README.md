@@ -351,8 +351,7 @@ with Datuk Hishamudin Hasan…" — rather than as a cap on invitations.
 
 `/executive-evening-2026` is the RSVP page for the invitation-only evening on
 Monday 16 November 2026, 6.00pm to 8.30pm MYT, at Sofitel Kuala Lumpur
-Damansara, with Datuk Hishamudin Hasan and Michael Solomon (Solly), CEO of
-frntlne. Its files are `executive-evening-2026/index.html`,
+Damansara, with Datuk Hishamudin Hasan and Michael Solomon, CEO of frntlne. Its files are `executive-evening-2026/index.html`,
 `executive-evening-2026/theme.css`, `executive-evening-2026/event.ics` and
 `assets/executive-evening-2026/`.
 
