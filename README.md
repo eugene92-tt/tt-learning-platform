@@ -324,11 +324,11 @@ out of search results.
 **To swap in when they arrive:**
 - Speaker photos are the originals, cropped to 560px squares with the head at
   54% of the frame and the eye line at 36% so the three read as one set. Their
-  white studio backgrounds are kept as they are. Datuk Hishamudin's source was
+  white studio backgrounds are kept as they are. Datuk Hishammudin's source was
   only 400px, so a larger original would sharpen his photo on retina screens.
 - UOA Academy logo: replace the typeset `.ev-logo-uoa` span in the header with
   an `<img>` (white version, SVG preferred).
-- Share card: `tools/og-future-chro-2026.html` -> `assets/future-chro-2026/og.jpg`,
+- Share card: `tools/og-future-chro-2026.html` -> `assets/future-chro-2026/og-v2.jpg`,
   regenerated the same way as the main card.
 
 **Wording deliberately different from the poster:** the headline is "Are you a
@@ -345,13 +345,13 @@ credibility), so page and poster say the same three things. The section sits
 between the hero and the speakers, so the page argues why, then who, then RSVP.
 Its closing line keeps the number but frames it as group size with a reason —
 "Kept to around 20 high-potential HR leaders, so every guest gets real time
-with Datuk Hishamudin Hasan…" — rather than as a cap on invitations.
+with Datuk Hishammudin Hasan…" — rather than as a cap on invitations.
 
 ## Executive Cocktail Evening page
 
 `/executive-evening-2026` is the RSVP page for the invitation-only evening on
 Monday 16 November 2026, 6.00pm to 8.30pm MYT, at Sofitel Kuala Lumpur
-Damansara, with Datuk Hishamudin Hasan and Michael Solomon, CEO of frntlne. Its files are `executive-evening-2026/index.html`,
+Damansara, with Datuk Hishammudin Hasan and Michael Solomon, CEO of frntlne. Its files are `executive-evening-2026/index.html`,
 `executive-evening-2026/theme.css`, `executive-evening-2026/event.ics` and
 `assets/executive-evening-2026/`.
 
