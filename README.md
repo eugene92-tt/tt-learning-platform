@@ -379,9 +379,11 @@ Script, not new CSS.
   drafted for the page and need sign-off; the poster only names the features.
 - "RSVP by Monday, 9 November" is a default chosen for catering numbers.
 
-**To swap in when it arrives:** Solly's own headshot. The current one is
-cropped from the poster and carries its blue backdrop next to Datuk's white
-studio photo.
+**Speaker photos** are both cropped from the poster, with the same framing
+(head 54% of the frame, eyes at 36%), so they share its navy backdrop and read
+as a pair: `hishamudin-poster.jpg` and `solly-poster.jpg`. If you swap in real
+headshots, swap both, so one studio photo doesn't sit beside one poster crop,
+and give them new file names (see below).
 
 ## Replacing an image: use a new file name
 
