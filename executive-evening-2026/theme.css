@@ -1,0 +1,11 @@
+/* Executive Cocktail Evening — re-tints the shared /event.css to this
+   poster's deep navy and amber. Only tokens live here; layout is shared with
+   /future-chro-2026 so the two events read as one family. */
+.ev {
+  --ev-ground: #07111F;
+  --ev-surface: #0D1A2E;
+  --ev-line: rgba(255, 255, 255, .10);
+  --ev-accent: #F4A62A;       /* 9.3:1 on the ground; safe for text and as a fill */
+  --ev-accent-600: #DD8E12;
+  --ev-accent-line: rgba(244, 166, 42, .40);
+}

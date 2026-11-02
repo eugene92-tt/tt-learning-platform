@@ -1,10 +1,13 @@
 /* ==========================================================================
-   Future CHRO 2026 — event page. Loads after /styles.css and reuses its
-   fonts, resets, .wrap, .btn, .capture-field, .hp, .sr-only and .thanks.
+   Event pages — shared layout for /future-chro-2026 and /executive-evening-2026.
+   Loads after /styles.css and reuses its fonts, resets, .wrap, .btn,
+   .capture-field, .hp, .sr-only and .thanks.
 
-   The look follows the poster's black and gold, without its lens flares,
-   glow and glossy type: one gold accent on a near-black ground. Everything
-   here is prefixed ev- so none of it can reach the main page's .hero/.brand.
+   Each event takes its colours from its own poster. The defaults below are
+   the Future CHRO black and gold; a page re-tints by setting the --ev-*
+   tokens on body.ev in a small theme file loaded after this one. One accent
+   on a dark ground, no glow or lens flares. Everything is prefixed ev- so
+   none of it can reach the main page's .hero/.brand.
    ========================================================================== */
 
 .ev {
@@ -14,9 +17,9 @@
   --ev-ink: #FFFFFF;
   --ev-ink-2: rgba(255, 255, 255, .76);
   --ev-ink-3: rgba(255, 255, 255, .56);
-  --ev-gold: #E9B44C;       /* 10.6:1 on the ground; safe for text and as a fill */
-  --ev-gold-600: #D49E33;
-  --ev-gold-line: rgba(233, 180, 76, .38);
+  --ev-accent: #E9B44C;      /* 10.6:1 on the ground; safe for text and as a fill */
+  --ev-accent-600: #D49E33;
+  --ev-accent-line: rgba(233, 180, 76, .38);
 
   background: var(--ev-ground);
   color: var(--ev-ink);
@@ -26,7 +29,7 @@
    browser's own [hidden] rule — without this the form stays on screen after
    it is submitted or closed. */
 .ev [hidden] { display: none !important; }
-.ev .skip { background: var(--ev-gold); color: var(--ev-ground); }
+.ev .skip { background: var(--ev-accent); color: var(--ev-ground); }
 
 /* Spaced capitals, the poster's own label voice. */
 .ev-eyebrow,
@@ -39,12 +42,12 @@
 }
 
 /* ---------- Gold button ---------- */
-.btn-gold { background: var(--ev-gold); color: var(--ev-ground); }
-.btn-gold:hover { background: var(--ev-gold-600); }
-.btn-gold[disabled] { opacity: .7; cursor: progress; }
-.btn-gold-line { background: transparent; color: var(--ev-ink); border-color: var(--ev-gold-line); }
-.btn-gold-line:hover { border-color: var(--ev-gold); }
-.ev .btn:focus-visible { outline-color: var(--ev-gold); }
+.btn-accent { background: var(--ev-accent); color: var(--ev-ground); }
+.btn-accent:hover { background: var(--ev-accent-600); }
+.btn-accent[disabled] { opacity: .7; cursor: progress; }
+.btn-accent-line { background: transparent; color: var(--ev-ink); border-color: var(--ev-accent-line); }
+.btn-accent-line:hover { border-color: var(--ev-accent); }
+.ev .btn:focus-visible { outline-color: var(--ev-accent); }
 
 /* ---------- Co-host bar ---------- */
 .ev-top { padding: 22px 0 0; }
@@ -59,6 +62,7 @@
    than the visible wordmark needs and pulled in on the left. */
 .ev-logo-asah { width: 92px; margin: -8px 0 -8px -10px; }
 .ev-cohosts > .ev-logo-asah { padding: 0 6px; }
+.ev-logo-frntlne { width: 86px; }
 .ev-logo-uoa { display: inline-flex; flex-direction: column; line-height: 1; }
 .ev-logo-uoa b { font-size: 21px; font-weight: 700; letter-spacing: .02em; }
 .ev-logo-uoa span { font-size: 8.5px; font-weight: 700; letter-spacing: .32em; text-transform: uppercase; margin-top: 3px; }
@@ -67,17 +71,17 @@
 .ev-hero { padding-top: 44px; }
 .ev-hero-grid { display: grid; gap: 36px; }
 .ev-eyebrow {
-  color: var(--ev-gold);
+  color: var(--ev-accent);
   display: flex; align-items: center; gap: 12px;
   margin-bottom: 20px;
 }
-.ev-eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--ev-gold); flex: none; }
+.ev-eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--ev-accent); flex: none; }
 .ev h1 {
   font-size: clamp(36px, 9.6vw, 62px);
   line-height: 1.04; font-weight: 700; letter-spacing: -.03em;
   text-wrap: balance;
 }
-.ev h1 em { font-style: normal; color: var(--ev-gold); }
+.ev h1 em { font-style: normal; color: var(--ev-accent); }
 .ev-lede {
   margin-top: 22px; max-width: 34em;
   font-size: 18px; line-height: 1.55; color: var(--ev-ink-2);
@@ -87,16 +91,16 @@
 .ev-ticket {
   align-self: start;
   background: var(--ev-surface);
-  border: 1px solid var(--ev-gold-line);
+  border: 1px solid var(--ev-accent-line);
   border-radius: var(--radius);
   padding: 24px;
 }
-.ev-ticket-tag { color: var(--ev-gold); margin-bottom: 16px; }
+.ev-ticket-tag { color: var(--ev-accent); margin-bottom: 16px; }
 .ev-facts { display: grid; gap: 14px; margin-bottom: 22px; }
 .ev-facts li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; }
 .ev-facts svg {
   width: 22px; height: 22px; margin-top: 1px;
-  fill: none; stroke: var(--ev-gold); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+  fill: none; stroke: var(--ev-accent); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
 }
 .ev-facts b { font-weight: 700; font-size: 17px; }
 .ev-facts small { display: block; font-size: 15px; color: var(--ev-ink-3); }
@@ -105,13 +109,15 @@
 .ev-ticket-note { margin-top: 12px; font-size: 14px; color: var(--ev-ink-3); text-align: center; }
 
 /* ---------- Speakers ---------- */
+/* Hero and speakers share a ground, so a hairline marks the change. */
+.ev-hero + .ev-speakers { border-top: 1px solid var(--ev-line); }
 
 .ev-kicker { color: var(--ev-ink-3); margin-bottom: 28px; }
 .ev-person {
   display: grid; grid-template-columns: 96px 1fr; gap: 18px; align-items: center;
 }
 .ev-person img { width: 96px; height: 96px; border-radius: var(--radius-sm); object-fit: cover; }
-.ev-role { color: var(--ev-gold); margin-bottom: 6px; font-size: 11px; }
+.ev-role { color: var(--ev-accent); margin-bottom: 6px; font-size: 11px; }
 .ev-person h3 { font-size: 20px; font-weight: 700; line-height: 1.2; letter-spacing: -.01em; }
 .ev-bio { margin-top: 6px; font-size: 15px; line-height: 1.5; color: var(--ev-ink-2); }
 
@@ -126,6 +132,37 @@
 .ev-person-lead .ev-bio { font-size: 17px; }
 .ev-cohost-grid { display: grid; gap: 24px; }
 
+/* Two speakers of equal billing, side by side on wide screens. */
+.ev-pair { display: grid; gap: 40px; }
+.ev-person.ev-person-duo { grid-template-columns: 1fr; align-items: start; gap: 20px; }
+.ev-person.ev-person-duo img { width: 100%; max-width: 240px; height: auto; aspect-ratio: 1; }
+.ev-person-duo h3 { font-size: clamp(22px, 5.6vw, 26px); }
+.ev-aka { font-weight: 500; color: var(--ev-ink-3); }
+.ev-role-line { margin-top: 6px; font-weight: 600; color: var(--ev-accent); }
+.ev-fact-plain { color: var(--ev-ink-2) !important; }
+.ev-nb { white-space: nowrap; }
+
+/* ---------- Feature band ---------- */
+.ev-band { background: var(--ev-surface); }
+.ev-band-h {
+  font-size: clamp(26px, 6.4vw, 38px); font-weight: 700; line-height: 1.12;
+  letter-spacing: -.02em; text-wrap: balance; margin-bottom: 32px;
+}
+.ev-feat-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.ev-feat-grid li { padding: 20px 0; border-top: 1px solid var(--ev-line); }
+.ev-feat-grid h3 {
+  font-size: 13px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--ev-accent);
+}
+.ev-feat-grid p { margin-top: 8px; color: var(--ev-ink-2); max-width: 30em; }
+.ev-payoff {
+  margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--ev-line);
+  font-size: clamp(22px, 5.6vw, 32px); font-weight: 700; line-height: 1.2; letter-spacing: -.015em;
+  text-wrap: balance;
+}
+.ev-payoff em { font-style: normal; color: var(--ev-accent); }
+.ev-proof { margin-top: 12px; color: var(--ev-ink-3); font-size: 15px; }
+
 /* ---------- Why attend ---------- */
 .ev-why { background: var(--ev-surface); }
 .ev-why-h {
@@ -135,7 +172,7 @@
 }
 .ev-why-list { list-style: none; margin: 0; padding: 0; }
 .ev-why-list li { display: grid; gap: 10px; padding: 26px 0; border-top: 1px solid var(--ev-line); }
-.ev-why-label { color: var(--ev-gold); }
+.ev-why-label { color: var(--ev-accent); }
 .ev-why-list h3 {
   font-size: clamp(20px, 5vw, 25px); font-weight: 700; line-height: 1.25;
   letter-spacing: -.012em; text-wrap: balance;
@@ -149,7 +186,7 @@
 }
 .ev-why-close::before {
   content: ""; display: block; width: 40px; height: 2px;
-  background: var(--ev-gold); margin-bottom: 18px;
+  background: var(--ev-accent); margin-bottom: 18px;
 }
 
 /* ---------- RSVP ---------- */
@@ -159,7 +196,7 @@
 .ev-details-lede { margin-top: 14px; color: var(--ev-ink-2); max-width: 30em; }
 .ev-dl { margin: 26px 0 0; display: grid; gap: 16px; }
 .ev-dl > div { display: grid; gap: 2px; padding-top: 16px; border-top: 1px solid var(--ev-line); }
-.ev-dl dt { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--ev-gold); }
+.ev-dl dt { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--ev-accent); }
 .ev-dl dd { margin: 0; color: var(--ev-ink); }
 .ev-dl a { color: var(--ev-ink-2); text-underline-offset: 3px; }
 .ev-dl a:hover { color: var(--ev-ink); }
@@ -171,14 +208,14 @@
 .ev-field label span { font-weight: 500; color: var(--ev-ink-3); margin-left: 4px; }
 .ev-field-pair { display: grid; gap: 16px; }
 .ev .capture-field { border-color: rgba(255,255,255,.16); background: rgba(255,255,255,.05); }
-.ev .capture input:focus { border-color: var(--ev-gold); background: rgba(255,255,255,.08); }
+.ev .capture input:focus { border-color: var(--ev-accent); background: rgba(255,255,255,.08); }
 .ev .capture input::placeholder { color: rgba(255,255,255,.34); }
 .ev-form .btn { width: 100%; margin-top: 6px; }
 .ev-form .error { margin-top: 0; }
 .ev-consent { font-size: 13px; line-height: 1.5; color: var(--ev-ink-3); }
 
-.ev-thanks { max-width: none; background: var(--ev-surface); border-color: var(--ev-gold-line); }
-.ev-thanks .thanks-icon { background: var(--ev-gold); color: var(--ev-ground); }
+.ev-thanks { max-width: none; background: var(--ev-surface); border-color: var(--ev-accent-line); }
+.ev-thanks .thanks-icon { background: var(--ev-accent); color: var(--ev-ground); }
 .ev-thanks a { color: var(--ev-ink); }
 .ev-cal { display: grid; gap: 10px; margin-top: 20px; }
 
@@ -190,7 +227,7 @@
 }
 .ev-foot p + p { margin-top: 8px; }
 .ev-foot a { color: var(--ev-ink-2); text-underline-offset: 3px; }
-.ev-motto { color: var(--ev-gold); margin-bottom: 16px; font-size: 11px; letter-spacing: .24em; }
+.ev-motto { color: var(--ev-accent); margin-bottom: 16px; font-size: 11px; letter-spacing: .24em; }
 .ev-motto span { white-space: nowrap; }
 .ev-motto i { font-style: normal; color: var(--ev-ink-3); margin: 0 .3em; }
 .ev-legal { font-size: 13px; }
@@ -206,6 +243,7 @@
   .ev-top { padding-top: 30px; }
   .ev-logo-tt { width: 124px; }
   .ev-logo-asah { width: 108px; }
+  .ev-logo-frntlne { width: 104px; }
   .ev-logo-uoa b { font-size: 25px; }
   .ev-logo-uoa span { font-size: 10px; }
 
@@ -214,6 +252,10 @@
   .ev-ticket { padding: 28px; }
 
   .ev-cohost-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .ev-pair { grid-template-columns: 1fr 1fr; gap: 56px; }
+  .ev-person.ev-person-duo { grid-template-columns: 150px minmax(0, 1fr); gap: 24px; align-items: start; }
+  .ev-person.ev-person-duo img { width: 150px; height: 150px; max-width: none; }
+  .ev-feat-grid { grid-template-columns: 1fr 1fr; column-gap: 56px; }
   .ev-person { grid-template-columns: 120px 1fr; gap: 22px; }
   .ev-person img { width: 120px; height: 120px; }
   .ev-person.ev-person-lead { grid-template-columns: 280px 1fr; gap: 40px; align-items: center; }

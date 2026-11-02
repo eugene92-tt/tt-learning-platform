@@ -1,0 +1,17 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Thriving Talents//Event RSVP//EN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:executive-evening-2026@thrivingtalents.com
+DTSTAMP:20261102T000000Z
+DTSTART:20261116T100000Z
+DTEND:20261116T123000Z
+SUMMARY:Executive Cocktail Evening
+LOCATION:Sofitel Kuala Lumpur Damansara
+DESCRIPTION:With Datuk Hishamudin Hasan and Michael Solomon (Solly)\, CEO o
+ f frntlne. Cocktails and mocktails\, networking\, and a live preview of As
+ ah.\nhttps://asah.thrivingtalents.com/executive-evening-2026
+URL:https://asah.thrivingtalents.com/executive-evening-2026
+END:VEVENT
+END:VCALENDAR

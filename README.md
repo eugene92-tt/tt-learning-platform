@@ -280,9 +280,9 @@ particular levy claim will be approved.
 
 `/future-chro-2026` is the RSVP page for the invitation-only session on
 Friday 13 November 2026, 9.30am to 12.30pm MYT, at UOA Academy, Bangsar South.
-Its files are `future-chro-2026/index.html`, `future-chro-2026/event.css`,
-`future-chro-2026/event.ics` and `assets/future-chro-2026/`. It shares
-`/styles.css`, `/script.js` and `/config.js` with the main page.
+Its files are `future-chro-2026/index.html`, `future-chro-2026/event.ics` and
+`assets/future-chro-2026/`. It shares `/styles.css`, `/script.js` and
+`/config.js` with the main page, and `/event.css` with the other event page.
 
 **How RSVPs work.** Michael invites people personally; only those who are coming
 fill in the form. Each RSVP lands on its own **Future CHRO 2026** tab (Email,
@@ -304,17 +304,19 @@ early-access one, the old version is still deployed. Delete the test row after.
 **Closing RSVPs.** Set `futureChroRsvpOpen: false` in `config.js`. The form is
 replaced by a short "RSVPs are closed" note pointing to sales@.
 
-**The Apps Script.** RSVPs are routed by `source: 'FUTURE-CHRO-2026'` at the top
-of `doPost`; everything else takes the early-access path exactly as before.
+**The Apps Script.** RSVPs are routed by the form's `data-campaign`, looked up
+in the `EVENTS` table at the top of the RSVP section of the script; everything
+else takes the early-access path exactly as before.
 After pasting the updated script, use **Deploy -> Manage deployments -> edit
 (pencil) -> Version: New version**. Do not choose "New deployment": it issues a
 new `/exec` URL and the live main page would keep posting to the old one. Run
-`previewRsvpConfirmation()` once to read the email in your own inbox, and
-`resendMissingRsvpConfirmations()` after any quota or mail failure.
+`previewFutureChroRsvp()` (or `previewExecutiveEveningRsvp()`) once to read the
+email in your own inbox, and `resendMissingRsvpConfirmations()`, which covers
+every event, after any quota or mail failure.
 
 **Every path on the page is absolute.** With `cleanUrls` and no trailing slash
-the page is served at `/future-chro-2026`, so a relative `event.css` would
-resolve to `/event.css` and 404.
+the page is served at `/future-chro-2026`, so a relative stylesheet path would
+resolve against `/` and 404.
 
 **The page is `noindex`.** It is invitation-only, so it shares by link but stays
 out of search results.
@@ -344,6 +346,51 @@ between the hero and the speakers, so the page argues why, then who, then RSVP.
 Its closing line keeps the number but frames it as group size with a reason —
 "Kept to around 20 high-potential HR leaders, so every guest gets real time
 with Datuk Hishamudin Hasan…" — rather than as a cap on invitations.
+
+## Executive Cocktail Evening page
+
+`/executive-evening-2026` is the RSVP page for the invitation-only evening on
+Monday 16 November 2026, 6.00pm to 8.30pm MYT, at Sofitel Kuala Lumpur
+Damansara, with Datuk Hishamudin Hasan and Michael Solomon (Solly), CEO of
+frntlne. Its files are `executive-evening-2026/index.html`,
+`executive-evening-2026/theme.css`, `executive-evening-2026/event.ics` and
+`assets/executive-evening-2026/`.
+
+It works exactly like the Future CHRO page: RSVPs land on their own
+**Executive Evening 2026** tab in the same sheet, each guest gets one "see you
+there" email with a calendar invite, and `executiveEveningRsvpOpen: false` in
+`config.js` closes the form. The poster asks guests to RSVP to their Thriving
+Talents contact; the page offers the form *and* that route, so RSVPs that arrive
+by WhatsApp still need adding to the tab by hand.
+
+**One layout, two looks.** Both event pages share `/event.css`. Its default
+colours are the Future CHRO black and gold; this page loads `theme.css`, which
+only re-sets the `--ev-*` tokens to the poster's navy (`#07111F`) and amber
+(`#F4A62A`). A third event needs a theme file and an `EVENTS` entry in the Apps
+Script, not new CSS.
+
+**Wording that differs from the poster:**
+- "Cocktails and mocktails" rather than "cocktails", so guests who don't drink
+  know the evening is for them too. Only true if mocktails are actually served.
+- The venue is written as the hotel's full name, Sofitel Kuala Lumpur Damansara.
+- "Central Sugars Refinery" (with an s), matching the Future CHRO page; the two
+  posters disagree.
+- The four feature lines under "What you'll see in the live preview" are
+  drafted for the page and need sign-off; the poster only names the features.
+- "RSVP by Monday, 9 November" is a default chosen for catering numbers.
+
+**To swap in when it arrives:** Solly's own headshot. The current one is
+cropped from the poster and carries its blue backdrop next to Datuk's white
+studio photo.
+
+## Replacing an image: use a new file name
+
+`vercel.json` tells browsers to cache everything under `/assets/` for a year
+without checking for updates (`immutable`). Overwrite `solly.jpg` with a new
+photo and anyone who has already opened the page keeps seeing the old one. When
+a picture changes, save it under a new name (`solly-2.jpg`) and update the
+`<img>` that points at it. Stylesheets and scripts live at the site root for
+the same reason.
 
 ## Content still to swap in
 

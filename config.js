@@ -29,6 +29,9 @@ window.TT_CONFIG = {
   // RSVPs: the form is replaced by a short "RSVPs are closed" note.
   futureChroRsvpOpen: true,
 
+  // Executive Cocktail Evening RSVP form (/executive-evening-2026).
+  executiveEveningRsvpOpen: true,
+
   // Overrides the frntlne co-brand logo in the header and footer.
   // The page ships with /assets/frntlne-logo-white.svg (reverse version, for the
   // navy background). /assets/frntlne-logo.svg is the original full-colour file,
